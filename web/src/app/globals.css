@@ -1,0 +1,177 @@
+/* 채피티 디자인 토큰 및 공통 스타일
+   web/index.html(프로토타입)에서 이관. 값은 원본을 그대로 유지한다. */
+
+:root {
+  --bg: #f7f8fa;
+  --surface: #ffffff;
+  --border: #e3e6ec;
+  --border-strong: #c9cfda;
+  --text: #16181d;
+  --text-sub: #5b6270;
+  --text-mute: #8b93a3;
+  --brand: #2f6bff;
+  --brand-weak: #eef3ff;
+  --brand-dark: #1f52d6;
+  --danger: #d63b3b;
+  --danger-weak: #fdeeee;
+  --radius: 14px;
+  --shadow: 0 1px 2px rgba(16, 20, 30, .04), 0 8px 24px rgba(16, 20, 30, .06);
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Malgun Gothic",
+               "맑은 고딕", system-ui, sans-serif;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── 레이아웃 ───────────────────────────────────────── */
+.header { border-bottom: 1px solid var(--border); background: var(--surface); }
+.header__inner {
+  max-width: 880px; margin: 0 auto; padding: 18px 24px;
+  display: flex; align-items: center; gap: 10px;
+}
+.logo {
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 700; font-size: 17px; letter-spacing: -.02em;
+}
+.logo__mark {
+  width: 26px; height: 26px; border-radius: 8px;
+  background: var(--brand); color: #fff;
+  display: grid; place-items: center; font-size: 14px; font-weight: 800;
+}
+.logo__sub { color: var(--text-mute); font-size: 12px; font-weight: 500; letter-spacing: 0; }
+
+main { max-width: 880px; margin: 0 auto; padding: 56px 24px 80px; }
+
+/* ── 히어로 ────────────────────────────────────────── */
+.hero { text-align: center; margin-bottom: 40px; }
+.hero__badge {
+  display: inline-block; padding: 5px 12px; border-radius: 999px;
+  background: var(--brand-weak); color: var(--brand-dark);
+  font-size: 13px; font-weight: 600; margin-bottom: 18px;
+}
+.hero__title {
+  margin: 0 0 14px; font-size: clamp(26px, 4.4vw, 38px);
+  line-height: 1.32; letter-spacing: -.035em; font-weight: 800;
+}
+.hero__title em { font-style: normal; color: var(--brand); }
+.hero__desc { margin: 0 auto; max-width: 520px; color: var(--text-sub); font-size: 16px; }
+
+/* ── 3단계 안내 ────────────────────────────────────── */
+.steps {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+  margin: 36px 0 28px; list-style: none; padding: 0;
+}
+.step {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 12px; padding: 16px 18px;
+}
+.step__no {
+  display: inline-grid; place-items: center; width: 22px; height: 22px;
+  border-radius: 7px; background: var(--brand-weak); color: var(--brand-dark);
+  font-size: 12px; font-weight: 700; margin-bottom: 8px;
+}
+.step__title { font-size: 15px; font-weight: 700; letter-spacing: -.02em; }
+.step__desc { font-size: 13px; color: var(--text-mute); margin-top: 2px; }
+
+/* ── 카드 ──────────────────────────────────────────── */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); box-shadow: var(--shadow); padding: 28px;
+}
+.card__title { margin: 0 0 4px; font-size: 18px; font-weight: 700; letter-spacing: -.025em; }
+.card__hint { margin: 0 0 20px; font-size: 13.5px; color: var(--text-mute); }
+
+/* ── 드롭존 ────────────────────────────────────────── */
+.dropzone {
+  border: 1.5px dashed var(--border-strong); border-radius: 12px;
+  background: #fbfcfe; padding: 40px 24px; text-align: center;
+  cursor: pointer; transition: border-color .15s, background .15s;
+  width: 100%; font-family: inherit; color: inherit; display: block;
+}
+.dropzone:hover, .dropzone:focus-visible {
+  border-color: var(--brand); background: var(--brand-weak); outline: none;
+}
+.dropzone.is-dragover { border-color: var(--brand); background: var(--brand-weak); }
+.dropzone__icon { font-size: 30px; line-height: 1; }
+.dropzone__main { margin-top: 10px; font-size: 15px; font-weight: 600; }
+.dropzone__main u { color: var(--brand); text-underline-offset: 3px; }
+.dropzone__sub { margin-top: 4px; font-size: 13px; color: var(--text-mute); }
+input[type="file"] { display: none; }
+
+/* ── 선택된 파일 ───────────────────────────────────── */
+.file {
+  display: flex; align-items: center; gap: 12px; margin-top: 14px;
+  padding: 13px 15px; border: 1px solid var(--border);
+  border-radius: 10px; background: #fbfcfe;
+}
+.file__icon {
+  width: 34px; height: 34px; flex: none; border-radius: 9px;
+  background: var(--brand-weak); color: var(--brand-dark);
+  display: grid; place-items: center; font-size: 11px; font-weight: 800;
+}
+.file__body { min-width: 0; flex: 1; }
+.file__name {
+  font-size: 14px; font-weight: 600;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.file__size { font-size: 12.5px; color: var(--text-mute); }
+.file__remove {
+  flex: none; border: 0; background: transparent; color: var(--text-mute);
+  font-size: 13px; cursor: pointer; padding: 6px 8px; border-radius: 6px;
+  font-family: inherit;
+}
+.file__remove:hover { background: #eef0f4; color: var(--text); }
+
+/* ── 제출 버튼 ─────────────────────────────────────── */
+.submit {
+  width: 100%; margin-top: 16px; padding: 15px; border: 0;
+  border-radius: 11px; background: var(--brand); color: #fff;
+  font-size: 15.5px; font-weight: 700; font-family: inherit;
+  letter-spacing: -.01em; cursor: pointer; transition: background .15s;
+}
+.submit:hover:not(:disabled) { background: var(--brand-dark); }
+.submit:disabled { background: #dfe3ea; color: #9aa2b1; cursor: not-allowed; }
+
+.privacy { margin: 16px 0 0; font-size: 12.5px; color: var(--text-mute); text-align: center; }
+
+/* ── 로딩 (LoadingIndicator) ───────────────────────── */
+.loading {
+  display: flex; align-items: center; gap: 12px; margin-top: 16px;
+  padding: 16px; border: 1px solid var(--border);
+  border-radius: 11px; background: var(--brand-weak);
+}
+.spinner {
+  width: 20px; height: 20px; flex: none;
+  border: 2.5px solid rgba(47, 107, 255, .25); border-top-color: var(--brand);
+  border-radius: 50%; animation: spin .8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.loading__text { font-size: 14.5px; font-weight: 600; color: var(--brand-dark); }
+
+/* ── 에러 배너 (ErrorBanner) ───────────────────────── */
+.error {
+  display: flex; align-items: flex-start; gap: 10px; margin-bottom: 20px;
+  padding: 13px 15px; border: 1px solid #f3c9c9; border-radius: 11px;
+  background: var(--danger-weak); color: #a82f2f;
+}
+.error__text { flex: 1; font-size: 14px; font-weight: 500; }
+.error__close {
+  flex: none; border: 0; background: transparent; color: inherit;
+  font-size: 16px; line-height: 1; cursor: pointer; padding: 2px 4px;
+  opacity: .6; font-family: inherit;
+}
+.error__close:hover { opacity: 1; }
+
+@media (max-width: 640px) {
+  main { padding: 36px 18px 60px; }
+  .steps { grid-template-columns: 1fr; gap: 8px; }
+  .card { padding: 20px; }
+  .dropzone { padding: 30px 16px; }
+}
