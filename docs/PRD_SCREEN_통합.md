@@ -311,7 +311,9 @@ flowchart TD
 
 ### 9.1 섹션별 설계
 
-**① 이력서 업로드 (UploadSection)** — *구현 완료*
+> ①~⑤ 전부 구현 완료 (2026-08-21). 컴포넌트는 `web/src/components/`, 상태 기계는 `web/src/app/page.jsx`.
+
+**① 이력서 업로드 (UploadSection)**
 - **노출 조건**: `status`가 `idle` 또는 `analyzing`일 때.
 - **표시 내용**: 드래그앤드롭 영역, 선택된 파일명, "분석하기" 버튼.
 - **제약**: PDF 또는 `.txt`만 허용, 5MB 이하.

@@ -23,10 +23,12 @@ function extensionOf(name) {
   return i === -1 ? '' : name.slice(i + 1).toLowerCase();
 }
 
-export default function UploadSection({ status, onAnalyze, onError, onClearError }) {
+export default function UploadSection({ status, onAnalyze, onError, onClearError, initialFile }) {
   const inputRef = useRef(null);
-  const [file, setFile] = useState(null);
+  // 데모 프리필은 초기값으로만 들어온다. 이후에는 사용자 선택이 유일한 출처다.
+  const [file, setFile] = useState(initialFile ?? null);
   const [isDragover, setDragover] = useState(false);
+  const isSample = file !== null && file === initialFile;
 
   const isAnalyzing = status === 'analyzing';
 
@@ -104,7 +106,11 @@ export default function UploadSection({ status, onAnalyze, onError, onClearError
               <span className="file__icon">{extensionOf(file.name).toUpperCase()}</span>
               <div className="file__body">
                 <div className="file__name">{file.name}</div>
-                <div className="file__size">{formatSize(file.size)}</div>
+                <div className="file__size">
+                  {formatSize(file.size)}
+                  {/* 샘플이 자기 이력서로 오해되지 않게 표시한다. */}
+                  {isSample && <span className="file__tag">데모 샘플</span>}
+                </div>
               </div>
               <button className="file__remove" type="button" onClick={resetFile}>삭제</button>
             </div>

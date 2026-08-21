@@ -238,8 +238,23 @@ curl -X POST -H 'Content-Type: application/json' -d @diagnose.json \
 
 | 라우트 | 목업 | 실제 |
 |---|:-:|---|
-| `/api/resume/analyze` | ✅ | ⏳ PDF 텍스트 추출 + Claude 호출 |
-| `/api/posting/parse` | ✅ | ⏳ URL 본문 추출 + Claude 호출 |
-| `/api/fit/diagnose` | ✅ | ⏳ 근거 문장 Claude 호출 (점수는 이미 실제 구현) |
+| `/api/resume/analyze` | ✅ | ✅ PDF·txt 텍스트 추출(`unpdf`) + Claude 호출 |
+| `/api/posting/parse` | ✅ | ✅ URL 본문 추출 + Claude 호출 |
+| `/api/fit/diagnose` | ✅ | ✅ 근거 문장 Claude 호출 (점수는 처음부터 실제 구현) |
 
-각 `route.js`의 `TODO` 주석에 남은 작업이 표시돼 있다. **적합도 계산은 목업이 아니라 실제 구현**이므로, 키가 없어도 점수·충족/필요 역량은 진짜 값이 나온다.
+**적합도 계산은 목업이 아니라 실제 구현**이므로, 키가 없어도 점수·충족/필요 역량은 진짜 값이 나온다.
+
+Claude 호출은 `web/src/lib/api/claude.js` 한 곳에 모여 있다. 세 호출 모두
+`output_config.format`으로 `contract.js`의 스키마를 강제하며, 모델은 `claude-opus-5`다.
+근거 문장 호출은 시스템 프롬프트 + 이력서 분석 결과 뒤에 캐시 지점을 둔다(PRD §8.5).
+
+| 호출 | effort | 이유 |
+|---|---|---|
+| 이력서 분석 | `high` | 세션당 1회. 이후 모든 진단의 입력이라 품질을 우선 |
+| 공고 파싱 | `medium` | 원문 추출이 주된 일이고 공고마다 반복 호출된다 |
+| 근거 문장 | `medium` | 진단 1건 10초 내외 목표(§7) |
+
+### 아직 반영되지 않은 것
+
+PRD §8.7의 코퍼스 스키마 확장(`must`/`preferred` 가중치 분리, 학력·전공 하드 필터,
+경험 깊이 계수, `verification` 배지)은 미적용이다. 위 계약은 확장 전 형태다.

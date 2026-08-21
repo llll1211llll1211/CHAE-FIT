@@ -1,81 +1,173 @@
 'use client';
 
 import { useState } from 'react';
+import AnalysisSummary from '@/components/AnalysisSummary';
 import ErrorBanner from '@/components/ErrorBanner';
+import FitReport from '@/components/FitReport';
+import LoadingIndicator from '@/components/LoadingIndicator';
+import PostingInput from '@/components/PostingInput';
+import PostingSummary from '@/components/PostingSummary';
 import UploadSection from '@/components/UploadSection';
+import { postFile, postJson } from '@/lib/api/client';
+import { DEMO_PREFILL, SAMPLE_POSTING_TEXT, sampleResumeFile } from '@/lib/demo/samples';
 
 /**
  * 채피티 단일 페이지 (PRD §9)
  *
- * 상태 흐름: idle → analyzing → analyzed → matching → matched (+ error)
- * 현재 구현 범위는 홈화면(① 업로드)까지다. ②③④는 이 아래에 순차적으로 붙는다.
+ * 상태 흐름: idle → analyzing → analyzed → parsing → parsed → diagnosing → diagnosed
+ * 로그인·라우팅 없이 ①~⑤ 섹션이 한 화면에서 순차적으로 열린다.
+ *
+ * **이력서 분석 결과(analysis)는 여기 한 곳에만 보관한다.** 공고를 바꿔 진단할 때
+ * 재분석하지 않고 이 값을 재전송한다 — 공고 N건 진단 = 이력서 분석 1회 + 공고 분석 N회(§8.5).
  */
 export default function Home() {
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState(null);
+  const [analysis, setAnalysis] = useState(null);
+  const [posting, setPosting] = useState(null);
+  const [report, setReport] = useState(null);
+
+  // 데모 프리필. File은 한 번만 만든다 — 매 렌더마다 새로 만들면 "데모 샘플" 표시가 깨진다.
+  const [sampleFile] = useState(() => (DEMO_PREFILL ? sampleResumeFile() : null));
+  const samplePosting = DEMO_PREFILL ? SAMPLE_POSTING_TEXT : undefined;
 
   async function handleAnalyze(file) {
     setErrorMessage(null);
     setStatus('analyzing');
 
-    const form = new FormData();
-    form.append('resume', file);
-
     try {
-      // TODO(F2·F3): /api/resume/analyze 라우트 구현 후 연결한다.
-      const res = await fetch('/api/resume/analyze', { method: 'POST', body: form });
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const analysis = await res.json();
-
-      // TODO: ② AnalysisSummary / ③ RoleRecommendations 렌더링
-      console.log('analysis', analysis);
+      const { analysis: result } = await postFile('/api/resume/analyze', 'resume', file);
+      setAnalysis(result);
       setStatus('analyzed');
-    } catch {
+    } catch (err) {
       setStatus('idle');
-      setErrorMessage('분석에 실패했습니다. 잠시 후 다시 시도해주세요.');
+      setErrorMessage(err.message);
     }
   }
 
+  /**
+   * ③ → ④ → ⑤. parse와 diagnose를 순차로 부른다.
+   * 진단이 실패해도 요약(④)은 남긴다 — 그래서 두 라우트를 나눴다(§8.6).
+   */
+  async function handleDiagnose(input) {
+    setErrorMessage(null);
+    setPosting(null);
+    setReport(null);
+    setStatus('parsing');
+
+    let parsed;
+    try {
+      parsed = await postJson('/api/posting/parse', input);
+    } catch (err) {
+      setStatus('analyzed');
+      setErrorMessage(err.message);
+      return;
+    }
+
+    setPosting(parsed.posting);
+    setStatus('diagnosing');
+
+    try {
+      const { report: result } = await postJson('/api/fit/diagnose', {
+        analysis,
+        posting: parsed.posting,
+      });
+      setReport(result);
+      setStatus('diagnosed');
+    } catch (err) {
+      setStatus('parsed');
+      setErrorMessage(err.message);
+    }
+  }
+
+  function handleReset() {
+    setStatus('idle');
+    setErrorMessage(null);
+    setAnalysis(null);
+    setPosting(null);
+    setReport(null);
+  }
+
+  const isLoading = status === 'parsing' || status === 'diagnosing';
+
   return (
     <main>
-      <section className="hero">
-        <span className="hero__badge">AI 경력분석 기반 직무 · 채용공고 추천</span>
-        <h1 className="hero__title">
-          내 이력서를 넣으면,<br />
-          <em>내게 맞는 직무와 채용공고</em>까지 한 번에
-        </h1>
-        <p className="hero__desc">
-          흩어진 공고를 검색하기 전에, 내 경험이 어떤 직무의 언어인지부터 확인하세요.
-          회원가입 없이 바로 시작할 수 있어요.
-        </p>
-      </section>
+      {analysis ? (
+        <div className="topbar">
+          <span className="pill pill--done">분석 완료</span>
+          <button className="linkbtn" type="button" onClick={handleReset}>
+            ↺ 새 이력서로 다시 분석
+          </button>
+        </div>
+      ) : (
+        <>
+          <section className="hero">
+            <span className="hero__badge">이력서 기반 기업별 직무 적합도 진단</span>
+            <h1 className="hero__title">
+              이 공고, 내 경험으로 지원해도 될까?<br />
+              <em>근거와 함께</em> 답해드려요
+            </h1>
+            <p className="hero__desc">
+              이력서와 지원하려는 채용공고를 넣으면, 무엇이 충족되고 무엇이 필요한지
+              공고의 문장을 짚어 알려드려요. 회원가입 없이 바로 시작할 수 있어요.
+            </p>
+          </section>
 
-      <ol className="steps">
-        <li className="step">
-          <span className="step__no">1</span>
-          <div className="step__title">이력서 업로드</div>
-          <p className="step__desc">PDF 또는 텍스트 파일</p>
-        </li>
-        <li className="step">
-          <span className="step__no">2</span>
-          <div className="step__title">AI 경력 · 스킬 분석</div>
-          <p className="step__desc">경험을 직무 역량으로 번역</p>
-        </li>
-        <li className="step">
-          <span className="step__no">3</span>
-          <div className="step__title">직무 · 공고 추천</div>
-          <p className="step__desc">추천 근거와 매칭 스킬까지</p>
-        </li>
-      </ol>
+          <ol className="steps">
+            <li className="step">
+              <span className="step__no">1</span>
+              <div className="step__title">이력서 업로드</div>
+              <p className="step__desc">PDF 또는 텍스트 파일</p>
+            </li>
+            <li className="step">
+              <span className="step__no">2</span>
+              <div className="step__title">채용공고 입력</div>
+              <p className="step__desc">본문 붙여넣기 또는 URL</p>
+            </li>
+            <li className="step">
+              <span className="step__no">3</span>
+              <div className="step__title">적합도 진단서</div>
+              <p className="step__desc">점수 · 필요 역량 · 판단 근거</p>
+            </li>
+          </ol>
+        </>
+      )}
 
       <ErrorBanner message={errorMessage} onClose={() => setErrorMessage(null)} />
 
-      <UploadSection
-        status={status}
-        onAnalyze={handleAnalyze}
-        onError={setErrorMessage}
-        onClearError={() => setErrorMessage(null)}
-      />
+      <div className="stack">
+        {/* ① — analysis가 생기면 자리를 비운다 (§9.3) */}
+        {!analysis && (
+          <UploadSection
+            status={status}
+            onAnalyze={handleAnalyze}
+            onError={setErrorMessage}
+            onClearError={() => setErrorMessage(null)}
+            initialFile={sampleFile}
+          />
+        )}
+
+        {/* ② */}
+        {analysis && <AnalysisSummary analysis={analysis} />}
+
+        {/* ③ — 진단 후에도 닫지 않는다. 여러 공고 비교가 페르소나 B의 동선이다(§4.2) */}
+        {analysis && (
+          <PostingInput
+            status={status}
+            onDiagnose={handleDiagnose}
+            hasReport={report !== null}
+            initialText={samplePosting}
+          />
+        )}
+
+        {isLoading && <LoadingIndicator status={status} />}
+
+        {/* ④ */}
+        {posting && <PostingSummary posting={posting} />}
+
+        {/* ⑤ */}
+        {report && <FitReport report={report} />}
+      </div>
     </main>
   );
 }
