@@ -1,0 +1,695 @@
+<title>chafit Snug</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#faf9ff; --bg-raised:#ffffff; --bg-tint:#f1effa;
+  --ink:#33323d; --ink-soft:#726f82; --ink-faint:#a6a3b5; --line:#eae7f5;
+  --accent:#7c9ce8; --accent-strong:#5f7fcb; --accent-soft:#e4ebfc; --secondary:#f2a9a0;
+  --good:#4f8a68; --good-soft:#e3f0e8; --warn:#c46a5c; --warn-soft:#fbe9e6; --bad:#b23b2e; --bad-soft:#fbe1dc;
+  --r-sm:16px; --r-md:22px; --r-lg:28px;
+  --sh-sm:0 6px 14px -6px rgba(124,156,232,.18); --sh-md:0 16px 34px -16px rgba(124,156,232,.3);
+  --header-h:76px; --max:1040px;
+  --font-sans:'Noto Sans KR','Malgun Gothic',sans-serif;
+  --font-head:'Jua','Noto Sans KR',sans-serif;
+}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--font-sans);margin:0;line-height:1.55;-webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--font-head);font-weight:400;text-wrap:balance;color:var(--ink);margin:0}
+a{color:inherit}
+button{font-family:inherit;cursor:pointer}
+:focus-visible{outline:2px solid var(--accent-strong);outline-offset:2px;border-radius:6px}
+.wrap{max-width:var(--max);margin:0 auto;padding:32px 20px 80px}
+@media (max-width:640px){.wrap{padding:20px 16px 64px}}
+
+/* topbar */
+.topbar{position:sticky;top:0;z-index:20;background:rgba(250,249,255,.9);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:var(--max);margin:0 auto;height:var(--header-h);display:flex;align-items:center;justify-content:space-between;padding:0 20px}
+.brand{display:flex;align-items:center;gap:10px;font-family:var(--font-head);font-size:22px;color:var(--accent-strong);text-decoration:none}
+.blobmark{width:34px;height:34px;flex:none}
+.menubtn{display:flex;align-items:center;gap:8px;background:var(--bg-raised);border:none;box-shadow:var(--sh-sm);border-radius:999px;padding:10px 18px;font-size:14px;font-weight:600;color:var(--ink)}
+.menubtn svg{width:16px;height:16px}
+.panel{position:absolute;left:0;right:0;top:var(--header-h);background:var(--bg-raised);box-shadow:var(--sh-md);border-radius:0 0 var(--r-lg) var(--r-lg);overflow:hidden;max-height:0;transition:max-height .28s ease}
+.panel.open{max-height:640px}
+.panel-inner{max-width:var(--max);margin:0 auto;padding:8px 20px 20px;overflow-x:auto}
+.panel-groups{display:grid;grid-template-columns:repeat(5,minmax(140px,1fr));gap:18px}
+@media (max-width:820px){.panel-groups{grid-template-columns:repeat(2,minmax(140px,1fr))}}
+.pgroup-label{font-size:12px;color:var(--ink-faint);font-weight:700;letter-spacing:.04em;margin:14px 0 6px}
+.pnav-item{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;color:var(--ink-soft);text-decoration:none;font-size:14px;font-weight:500}
+.pnav-item svg{width:17px;height:17px;flex:none}
+.pnav-item.active{background:var(--accent-soft);color:var(--accent-strong);font-weight:700}
+.pnav-item:hover{background:var(--bg-tint)}
+.panel-foot{margin-top:16px;padding-top:14px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-faint)}
+
+/* generic */
+.card{background:var(--bg-raised);border-radius:var(--r-md);box-shadow:var(--sh-sm);padding:22px}
+.badge{display:inline-flex;align-items:center;gap:4px;border-radius:999px;padding:4px 12px;font-size:12.5px;font-weight:700}
+.badge-accent{background:var(--accent-soft);color:var(--accent-strong)}
+.badge-good{background:var(--good-soft);color:var(--good)}
+.badge-warn{background:var(--warn-soft);color:var(--warn)}
+.badge-bad{background:var(--bad-soft);color:var(--bad)}
+.badge-neutral{background:var(--bg-tint);color:var(--ink-soft)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 22px;border-radius:999px;border:none;font-weight:700;font-size:15px}
+.btn-primary{background:var(--accent);color:#fff;box-shadow:0 10px 22px -10px rgba(124,156,232,.55)}
+.btn-primary:hover{background:var(--accent-strong)}
+.btn-ghost{background:var(--bg-tint);color:var(--ink)}
+.btn-ghost:hover{background:var(--accent-soft);color:var(--accent-strong)}
+.btn-sm{height:38px;padding:0 16px;font-size:13.5px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.pagehead{margin-bottom:22px}
+.crumb{font-size:13px;color:var(--ink-faint);margin-bottom:8px}
+.pagetitle{font-size:26px;margin-bottom:6px}
+.pagesub{color:var(--ink-soft);font-size:14.5px}
+.notice{background:var(--accent-soft);color:var(--accent-strong);border-radius:var(--r-sm);padding:12px 16px;font-size:13.5px;display:flex;gap:8px;align-items:flex-start}
+.notice-warn{background:var(--warn-soft);color:var(--warn)}
+.textarea,.textInput,select{width:100%;border:1px solid var(--line);background:var(--bg-raised);border-radius:var(--r-sm);padding:12px 14px;font-family:inherit;font-size:14.5px;color:var(--ink)}
+.textarea{min-height:180px;resize:vertical}
+.chip{display:inline-flex;align-items:center;padding:8px 16px;border-radius:999px;background:var(--bg-tint);color:var(--ink-soft);font-size:14px;font-weight:600;border:none}
+.chip.on{background:var(--accent);color:#fff}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+@media (max-width:720px){.grid2{grid-template-columns:1fr}}
+.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:820px){.grid3{grid-template-columns:1fr}}
+.rowflex{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.tablewrap{overflow-x:auto;border-radius:var(--r-md);box-shadow:var(--sh-sm)}
+table{border-collapse:collapse;width:100%;min-width:640px;background:var(--bg-raised)}
+th,td{padding:14px 16px;text-align:left;font-size:14px;border-bottom:1px solid var(--line)}
+th{color:var(--ink-faint);font-weight:700;font-size:12.5px;letter-spacing:.03em}
+.mascot{width:56px;height:56px;flex:none}
+.stepbar{display:flex;align-items:center;gap:10px;margin-bottom:26px;font-size:12.5px;color:var(--ink-faint);font-weight:700}
+.dot{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dot.on{background:var(--accent)}
+
+/* home */
+.hero{display:flex;flex-direction:column;gap:10px;margin-bottom:8px}
+.eyebrow{color:var(--accent-strong);font-weight:700;font-size:13px;letter-spacing:.03em}
+.hero h1{font-size:34px;margin:2px 0 6px}
+.herosub{color:var(--ink-soft);font-size:15.5px;max-width:560px}
+.statsstrip{display:flex;gap:28px;flex-wrap:wrap;margin:26px 0 30px;padding:18px 22px;background:var(--bg-tint);border-radius:var(--r-md)}
+.statpct{font-size:22px;font-weight:800;color:var(--accent-strong);font-variant-numeric:tabular-nums}
+.statlabel{font-size:12.5px;color:var(--ink-soft)}
+.statfoot{width:100%;font-size:11.5px;color:var(--ink-faint);margin-top:2px}
+.pathgrid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:18px;margin-bottom:36px}
+@media (max-width:860px){.pathgrid{grid-template-columns:1fr}}
+.pathcard{border-radius:var(--r-lg);padding:26px;display:flex;flex-direction:column;gap:14px;min-height:220px}
+.pathBlue{background:var(--accent-soft)}
+.pathGreen{background:var(--good-soft)}
+.pathFeatured{background:var(--secondary);color:#fff;transform:translateY(-8px);box-shadow:0 20px 38px -14px rgba(242,169,160,.55)}
+.pathtag{font-size:12px;font-weight:700;opacity:.75}
+.pathaudience{align-self:flex-start;font-size:12px;padding:3px 10px;border-radius:999px;background:rgba(255,255,255,.5);font-weight:700}
+.pathFeatured .pathaudience{background:rgba(255,255,255,.28);color:#fff}
+.pathmeta{font-size:12.5px;opacity:.8;margin-top:auto}
+.principles{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;padding-top:26px;border-top:1px solid var(--line)}
+@media (max-width:820px){.principles{grid-template-columns:1fr}}
+.principle h3{font-size:15px;margin-bottom:6px}
+.principle p{font-size:13.5px;color:var(--ink-soft);margin:0}
+
+/* misc components */
+.dropzone{border:2px dashed var(--line);border-radius:var(--r-md);padding:34px 20px;text-align:center;color:var(--ink-soft);background:var(--bg-tint)}
+.dropzone.drag{border-color:var(--accent)}
+.filerow{display:flex;align-items:center;gap:10px;background:var(--bg-raised);border-radius:var(--r-sm);padding:10px 14px;margin-top:12px;box-shadow:var(--sh-sm)}
+.checkrow{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:var(--ink-soft);padding:10px 0;border-bottom:1px solid var(--line)}
+.checkrow:last-child{border-bottom:none}
+.checkrow input{margin-top:3px}
+.tabs{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto}
+.tabbtn{padding:10px 18px;border-radius:999px;background:var(--bg-tint);color:var(--ink-soft);border:none;font-weight:700;font-size:13.5px;white-space:nowrap}
+.tabbtn.on{background:var(--accent);color:#fff}
+.evrow{display:flex;gap:12px;padding:14px 0;border-bottom:1px solid var(--line)}
+.evrow:last-child{border-bottom:none}
+.evrow svg{width:20px;height:20px;flex:none;margin-top:2px}
+.togglewrap{display:flex;align-items:center;gap:10px;font-size:13.5px;color:var(--ink-soft)}
+.toggle{width:42px;height:24px;border-radius:999px;background:var(--line);position:relative;border:none;flex:none}
+.toggle .knob{position:absolute;top:3px;left:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:left .15s}
+.toggle.on{background:var(--accent)}
+.toggle.on .knob{left:21px}
+.bar-outer{background:var(--bg-tint);border-radius:999px;height:10px;overflow:hidden}
+.bar-inner{height:100%;border-radius:999px}
+.fieldpills{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
+.icon{width:17px;height:17px}
+</style>
+
+<div class="topbar">
+  <div class="topbar-inner">
+    <a href="#/home" class="brand">
+      <svg class="blobmark" viewBox="0 0 40 40"><path fill="#7c9ce8" d="M20 3c8 0 15 5 16 13 1 9-6 21-16 21S2 25 3 16C4 8 12 3 20 3Z"/><circle cx="15" cy="18" r="2.4" fill="#fff"/><circle cx="25" cy="18" r="2.4" fill="#fff"/><path d="M14 25c2.5 2.5 9.5 2.5 12 0" stroke="#fff" stroke-width="2" stroke-linecap="round" fill="none"/></svg>
+      chafit
+    </a>
+    <button class="menubtn" id="menuToggle" onclick="togglePanel()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+      메뉴
+    </button>
+  </div>
+  <div class="panel" id="navPanel"><div class="panel-inner" id="navPanelInner"></div></div>
+</div>
+
+<div class="wrap" id="app"></div>
+
+<script>
+function ic(name){
+  const P='fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"';
+  const M={
+    house:'<path '+P+' d="M4 11.5 12 4l8 7.5"/><path '+P+' d="M6 10v9a1 1 0 0 0 1 1h3v-6h4v6h3a1 1 0 0 0 1-1v-9"/>',
+    filetext:'<path '+P+' d="M7 3h7l4 4v13a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path '+P+' d="M14 3v4h4M9 12h6M9 15.5h6M9 9h3"/>',
+    chats:'<path '+P+' d="M4 12a7 7 0 1 1 3 5.7L4 19l1.2-3.1A7 7 0 0 1 4 12Z"/><circle cx="9" cy="12" r=".6" fill="currentColor"/><circle cx="12" cy="12" r=".6" fill="currentColor"/><circle cx="15" cy="12" r=".6" fill="currentColor"/>',
+    compass:'<circle cx="12" cy="12" r="9" '+P+'/><path '+P+' d="m15 9-5 2-1.5 5L14 14l1-5Z"/>',
+    news:'<rect x="3" y="6" width="14" height="13" rx="1" '+P+'/><path '+P+' d="M17 9h3a1 1 0 0 1 1 1v8a2 2 0 0 1-2 2H7"/><path '+P+' d="M6 9.5h8M6 12.5h8M6 15.5h5"/>',
+    target:'<circle cx="12" cy="12" r="8.5" '+P+'/><circle cx="12" cy="12" r="4.5" '+P+'/><circle cx="12" cy="12" r=".9" fill="currentColor"/>',
+    listchecks:'<path '+P+' d="M9 6h11M9 12h11M9 18h11"/><path '+P+' d="m3.2 6 1 1L6 5.2M3.2 12l1 1L6 11.2M3.2 18l1 1 1.8-1.8"/>',
+    star:'<path '+P+' d="M12 3.5 14.6 9l6 .9-4.4 4.2 1 6-5.2-2.8-5.2 2.8 1-6L3.4 9.9l6-.9Z"/>',
+    notepencil:'<path '+P+' d="M6 3h9l4 4v13a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1Z"/><path '+P+' d="m9.5 17 .5-2.5 6-6 2 2-6 6Z"/>',
+    clock:'<circle cx="12" cy="12" r="8.5" '+P+'/><path '+P+' d="M12 8v4l3 2"/><path '+P+' d="M4 5a10 10 0 0 0-1 3"/>',
+    checksquare:'<rect x="4" y="4" width="16" height="16" rx="3" '+P+'/><path '+P+' d="m8.5 12.5 2.3 2.3L16 9.5"/>',
+    chartup:'<path '+P+' d="M4 19V9M9.5 19V5M15 19v-8M20 19V3"/>',
+    bell:'<path '+P+' d="M6 10a6 6 0 1 1 12 0c0 3 1 5 2 6H4c1-1 2-3 2-6Z"/><path '+P+' d="M10 19a2 2 0 0 0 4 0"/>',
+    bellring:'<path '+P+' d="M6 10a6 6 0 1 1 12 0c0 3 1 5 2 6H4c1-1 2-3 2-6Z"/><path '+P+' d="M10 19a2 2 0 0 0 4 0M18.5 5.5a9 9 0 0 1 1.8 4M3.7 9.5a9 9 0 0 1 1.8-4"/>',
+    upload:'<path '+P+' d="M12 15V4M8 8l4-4 4 4"/><path '+P+' d="M4 15v4a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-4"/>',
+    trash:'<path '+P+' d="M5 7h14M9 7V5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2M7 7l1 12a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1l1-12"/>',
+    x:'<path '+P+' d="M6 6l12 12M18 6 6 18"/>',
+    check:'<circle cx="12" cy="12" r="9" fill="var(--good-soft)"/><path stroke="var(--good)" stroke-width="2" stroke-linecap="round" fill="none" d="m8 12.5 2.5 2.5L16 9.5"/>',
+    warn:'<circle cx="12" cy="12" r="9" fill="var(--warn-soft)"/><path stroke="var(--warn)" stroke-width="2" stroke-linecap="round" fill="none" d="M12 8v5M12 16.2v.1"/>'
+  };
+  return '<svg class="icon" viewBox="0 0 24 24">'+(M[name]||M.star)+'</svg>';
+}
+
+const NAV=[
+  {label:'시작',items:[{t:'시작',i:'house',h:'#/home'}]},
+  {label:'내 경험 정리',items:[{t:'이력서',i:'filetext',h:'#/resume'},{t:'문답 정리',i:'chats',h:'#/interview'},{t:'직무 지도',i:'compass',h:'#/job-map'}]},
+  {label:'적합도 진단',items:[{t:'공고 요약',i:'news',h:'#/posting'},{t:'적합도 진단',i:'target',h:'#/diagnosis'},{t:'갭 리포트',i:'listchecks',h:'#/gap-report'}]},
+  {label:'활용',items:[{t:'관심 기업',i:'star',h:'#/companies'},{t:'자소서',i:'notepencil',h:'#/cover-letter'}]},
+  {label:'내 기록',items:[{t:'진단 이력',i:'clock',h:'#/history'},{t:'체크리스트',i:'checksquare',h:'#/checklist'},{t:'내 역량',i:'chartup',h:'#/competitiveness'}]}
+];
+
+function renderPanel(){
+  const cur=location.hash||'#/home';
+  document.getElementById('navPanelInner').innerHTML=
+    '<div class="panel-groups">'+NAV.map(g=>
+      '<div><div class="pgroup-label">'+g.label+'</div>'+
+      g.items.map(it=>'<a class="pnav-item'+(cur===it.h?' active':'')+'" href="'+it.h+'">'+ic(it.i)+it.t+'</a>').join('')+
+      '</div>'
+    ).join('')+'</div>'+
+    '<div class="panel-foot">회원가입 없이 세션 동안 이용합니다.</div>';
+}
+function togglePanel(){document.getElementById('navPanel').classList.toggle('open')}
+window.addEventListener('hashchange',()=>{document.getElementById('navPanel').classList.remove('open');renderPanel();route();window.scrollTo(0,0)});
+
+/* ---------- data ---------- */
+const FIELD_PRESETS={
+  semiconductor:{label:'반도체 공정기술',
+    jobMap:{totalPostings:240,headerNote:'240건의 채용공고를 분석해 정리한 기준이에요. 실제 요구 수준은 기업마다 달라요.',
+      tiers:[
+        {title:'거의 모든 공고',items:[{title:'반도체 공정 기초 이해',count:212},{title:'품질·수율 데이터 분석 경험',count:198},{title:'엑셀·통계 도구 활용',count:189}]},
+        {title:'절반 정도',items:[{title:'SPC·DOE 통계기법 이해',count:126},{title:'클린룸 실습·인턴 경험',count:108},{title:'파이썬 데이터분석',count:97}]},
+        {title:'있으면 눈에 띔',items:[{title:'반도체 관련 논문·프로젝트',count:41},{title:'품질경영기사 자격증',count:33},{title:'해외 인턴·교환 경험',count:19}]}
+      ],
+      orderSteps:[{title:'기초 다지기',body:'공정 이론과 통계 기초를 먼저 정리해요.'},{title:'실습으로 증명',body:'교내 실습이나 인턴으로 실제 경험을 쌓아요.'},{title:'데이터로 보완',body:'SPC·DOE 같은 통계기법을 데이터 프로젝트로 보여줘요.'}],
+      examplePosting:'모집부문: 반도체 공정기술(식각/증착)\n담당업무: 공정 데이터 모니터링, 수율 개선 과제 수행\n자격요건: 관련 전공 학사 이상, 통계 분석 도구 활용 가능\n우대사항: SPC/DOE 경험, 클린룸 실습 경험, 파이썬 활용 가능자'},
+    posting:{tags:[
+        {label:'반도체 공정 이해',required:true},{label:'품질·수율 데이터 분석',required:true},{label:'SPC 통계기법',required:true},
+        {label:'클린룸 실습 경험',required:true},{label:'엑셀 활용 능력',required:true},{label:'화학·재료 전공 지식',required:true},
+        {label:'파이썬 데이터분석',required:false},{label:'품질경영기사',required:false},{label:'DOE 실험계획법',required:false},
+        {label:'해외 인턴 경험',required:false},{label:'반도체 관련 논문',required:false},{label:'6시그마 교육 이수',required:false}],
+      summary:{duty:'공정 데이터 모니터링과 수율 개선 과제를 담당해요.',requirement:'관련 전공과 통계 분석 도구 활용 능력을 요구해요.',preferred:'SPC/DOE 경험과 클린룸 실습 경험을 우대해요.'}},
+    diagnosis:{company:'삼성전자 DS',coverage:'8/12',requiredBreakdown:'필수 6개 중 5개 충족',preferredBreakdown:'우대 6개 중 3개 충족',refScore:67,
+      evidence:[
+        {title:'SPC 통계기법 이해',tag:'필수',quote:'교내 품질관리 프로젝트에서 SPC 차트로 공정 이상을 탐지했다고 답변했어요.',source:'인터뷰 답변 · 3번 문항'},
+        {title:'엑셀·통계 도구 활용',tag:'필수',quote:'졸업 프로젝트에서 엑셀·미니탭으로 데이터를 정리했다고 답변했어요.',source:'인터뷰 답변 · 1번 문항'},
+        {title:'화학·재료 전공 지식',tag:'필수',quote:'반도체 소재 관련 전공 과목을 이수했다고 답변했어요.',source:'인터뷰 답변 · 1번 문항'}],
+      needsReview:[
+        {title:'클린룸 실습 경험',kind:'필수',body:'클린룸 실습이나 인턴 경험이 아직 확인되지 않았어요.',action:'문답으로 보완하기',href:'#/interview'},
+        {title:'DOE 실험계획법',kind:'우대',body:'DOE 관련 경험이나 교육 이력이 확인되지 않았어요.',action:'경험 더 채우기',href:'#/interview'},
+        {title:'품질경영기사',kind:'우대',body:'관련 자격증 취득 여부가 확인되지 않았어요.',action:'갭 리포트에서 보기',href:'#/gap-report'}]},
+    competitiveness:{refScore:64,items:[
+        {title:'SPC·DOE 통계기법',evidence:true,freq:53,thickness:40},
+        {title:'클린룸 실습 경험',evidence:false,freq:45,thickness:10},
+        {title:'파이썬 데이터분석',evidence:true,freq:41,thickness:65},
+        {title:'품질경영기사',evidence:false,freq:22,thickness:0}]}},
+  software:{label:'SW 개발',
+    jobMap:{totalPostings:186,headerNote:'186건의 채용공고를 분석해 정리한 기준이에요.',
+      tiers:[
+        {title:'거의 모든 공고',items:[{title:'자료구조·알고리즘 이해',count:171},{title:'Git 협업 경험',count:158},{title:'하나 이상 언어 숙련',count:150}]},
+        {title:'절반 정도',items:[{title:'DB·SQL 활용',count:96},{title:'팀 프로젝트·협업 경험',count:88},{title:'CS 기초 지식',count:79}]},
+        {title:'있으면 눈에 띔',items:[{title:'오픈소스 기여',count:24},{title:'배포·CI/CD 경험',count:21},{title:'해커톤 수상',count:14}]}
+      ],
+      orderSteps:[{title:'기초 다지기',body:'자료구조와 CS 기초를 정리해요.'},{title:'프로젝트로 증명',body:'팀 프로젝트로 협업·구현 경험을 쌓아요.'},{title:'배포로 보완',body:'실제 배포·운영 경험을 더해요.'}],
+      examplePosting:'모집부문: 백엔드 개발\n담당업무: 서비스 API 설계 및 운영\n자격요건: 하나 이상 언어 숙련, 자료구조 이해\n우대사항: 클라우드 배포 경험, 오픈소스 기여'},
+    posting:{tags:[
+        {label:'자료구조·알고리즘',required:true},{label:'Git 협업',required:true},{label:'하나 이상 언어 숙련',required:true},
+        {label:'DB·SQL 활용',required:true},{label:'CS 기초 지식',required:true},{label:'문제해결 능력',required:true},
+        {label:'클라우드 배포 경험',required:false},{label:'오픈소스 기여',required:false},{label:'CI/CD 경험',required:false},
+        {label:'해커톤 수상',required:false},{label:'테스트 코드 작성',required:false},{label:'대용량 처리 경험',required:false}],
+      summary:{duty:'서비스 API 설계와 운영을 담당해요.',requirement:'언어 숙련도와 자료구조 이해를 요구해요.',preferred:'클라우드 배포와 오픈소스 경험을 우대해요.'}},
+    diagnosis:{company:'네이버',coverage:'7/11',requiredBreakdown:'필수 6개 중 5개 충족',preferredBreakdown:'우대 6개 중 2개 충족',refScore:61,
+      evidence:[{title:'자료구조·알고리즘 이해',tag:'필수',quote:'코딩테스트 스터디에서 매주 문제를 풀었다고 답변했어요.',source:'인터뷰 답변 · 3번 문항'},
+        {title:'Git 협업',tag:'필수',quote:'팀 프로젝트에서 Git으로 브랜치 전략을 사용했다고 답변했어요.',source:'인터뷰 답변 · 3번 문항'},
+        {title:'DB·SQL 활용',tag:'필수',quote:'캡스톤에서 관계형 DB 스키마를 설계했다고 답변했어요.',source:'인터뷰 답변 · 3번 문항'}],
+      needsReview:[{title:'클라우드 배포 경험',kind:'우대',body:'배포·운영 경험이 아직 확인되지 않았어요.',action:'문답으로 보완하기',href:'#/interview'},
+        {title:'오픈소스 기여',kind:'우대',body:'기여 이력이 확인되지 않았어요.',action:'경험 더 채우기',href:'#/interview'},
+        {title:'CS 기초 지식',kind:'필수',body:'전공 이수 여부가 명확하지 않아요.',action:'갭 리포트에서 보기',href:'#/gap-report'}]},
+    competitiveness:{refScore:58,items:[{title:'클라우드 배포 경험',evidence:false,freq:38,thickness:5},
+        {title:'자료구조·알고리즘',evidence:true,freq:62,thickness:70},{title:'DB·SQL 활용',evidence:true,freq:44,thickness:55},
+        {title:'오픈소스 기여',evidence:false,freq:15,thickness:0}]}},
+  marketing:{label:'마케팅',
+    jobMap:{totalPostings:142,headerNote:'142건의 채용공고를 분석해 정리한 기준이에요.',
+      tiers:[
+        {title:'거의 모든 공고',items:[{title:'콘텐츠 기획·작성',count:120},{title:'데이터 기반 분석',count:104},{title:'SNS·채널 운영 경험',count:98}]},
+        {title:'절반 정도',items:[{title:'GA·데이터 툴 활용',count:61},{title:'캠페인 기획 경험',count:55},{title:'디자인 툴 활용',count:48}]},
+        {title:'있으면 눈에 띔',items:[{title:'브랜드 공모전 수상',count:17},{title:'광고 매체 운영 경험',count:14},{title:'서포터즈 활동',count:22}]}
+      ],
+      orderSteps:[{title:'채널 감각 쌓기',body:'SNS·콘텐츠 운영 경험부터 만들어요.'},{title:'데이터로 증명',body:'캠페인 성과를 데이터로 정리해요.'},{title:'기획으로 보완',body:'직접 기획한 캠페인 사례를 더해요.'}],
+      examplePosting:'모집부문: 콘텐츠 마케팅\n담당업무: SNS 채널 운영 및 콘텐츠 기획\n자격요건: 콘텐츠 기획 경험, 데이터 분석 이해\n우대사항: GA 활용 경험, 캠페인 기획 경험'},
+    posting:{tags:[{label:'콘텐츠 기획·작성',required:true},{label:'데이터 기반 분석',required:true},{label:'SNS 채널 운영',required:true},
+        {label:'커뮤니케이션 능력',required:true},{label:'일정 관리 능력',required:true},{label:'트렌드 이해',required:true},
+        {label:'GA 활용 경험',required:false},{label:'캠페인 기획 경험',required:false},{label:'디자인 툴 활용',required:false},
+        {label:'광고 매체 운영',required:false},{label:'브랜드 공모전 수상',required:false},{label:'영상 편집 경험',required:false}],
+      summary:{duty:'SNS 채널 운영과 콘텐츠 기획을 담당해요.',requirement:'콘텐츠 기획 경험과 데이터 분석 이해를 요구해요.',preferred:'GA 활용과 캠페인 기획 경험을 우대해요.'}},
+    diagnosis:{company:'오늘의집',coverage:'6/10',requiredBreakdown:'필수 6개 중 4개 충족',preferredBreakdown:'우대 4개 중 2개 충족',refScore:55,
+      evidence:[{title:'콘텐츠 기획·작성',tag:'필수',quote:'교내 매거진에서 콘텐츠를 기획·작성했다고 답변했어요.',source:'인터뷰 답변 · 3번 문항'},
+        {title:'SNS 채널 운영',tag:'필수',quote:'개인 채널을 1년 이상 운영했다고 답변했어요.',source:'인터뷰 답변 · 3번 문항'}],
+      needsReview:[{title:'GA 활용 경험',kind:'우대',body:'데이터 툴 활용 경험이 확인되지 않았어요.',action:'문답으로 보완하기',href:'#/interview'},
+        {title:'캠페인 기획 경험',kind:'우대',body:'직접 기획한 캠페인 사례가 없어요.',action:'경험 더 채우기',href:'#/interview'},
+        {title:'데이터 기반 분석',kind:'필수',body:'분석 툴 활용 여부가 명확하지 않아요.',action:'갭 리포트에서 보기',href:'#/gap-report'}]},
+    competitiveness:{refScore:52,items:[{title:'GA 활용 경험',evidence:false,freq:33,thickness:0},
+        {title:'콘텐츠 기획·작성',evidence:true,freq:58,thickness:60},{title:'SNS 채널 운영',evidence:true,freq:51,thickness:75}]}},
+  design:{label:'UX·제품 디자인',
+    jobMap:{totalPostings:98,headerNote:'98건의 채용공고를 분석해 정리한 기준이에요.',
+      tiers:[
+        {title:'거의 모든 공고',items:[{title:'Figma 등 툴 숙련',count:91},{title:'사용자 리서치 이해',count:74},{title:'포트폴리오 제출',count:98}]},
+        {title:'절반 정도',items:[{title:'프로토타이핑 경험',count:52},{title:'디자인 시스템 이해',count:44},{title:'협업 툴 활용',count:39}]},
+        {title:'있으면 눈에 띔',items:[{title:'개발 협업 경험',count:18},{title:'공모전 수상',count:15},{title:'실무 인턴 경험',count:12}]}
+      ],
+      orderSteps:[{title:'툴 숙련도 쌓기',body:'Figma로 실제 화면을 설계해봐요.'},{title:'리서치로 증명',body:'사용자 리서치 기반 개선 사례를 만들어요.'},{title:'포트폴리오로 보완',body:'과정이 드러나는 포트폴리오로 정리해요.'}],
+      examplePosting:'모집부문: 제품 디자이너\n담당업무: 서비스 화면 설계 및 개선\n자격요건: Figma 숙련, 포트폴리오 제출\n우대사항: 사용자 리서치 경험, 디자인 시스템 이해'},
+    posting:{tags:[{label:'Figma 등 툴 숙련',required:true},{label:'포트폴리오 제출',required:true},{label:'사용자 리서치 이해',required:true},
+        {label:'협업 능력',required:true},{label:'프로토타이핑 경험',required:true},{label:'비주얼 감각',required:true},
+        {label:'디자인 시스템 이해',required:false},{label:'개발 협업 경험',required:false},{label:'공모전 수상',required:false},
+        {label:'실무 인턴 경험',required:false},{label:'데이터 기반 개선 경험',required:false},{label:'모션 디자인',required:false}],
+      summary:{duty:'서비스 화면 설계와 개선을 담당해요.',requirement:'Figma 숙련과 포트폴리오 제출을 요구해요.',preferred:'리서치 경험과 디자인 시스템 이해를 우대해요.'}},
+    diagnosis:{company:'당근마켓',coverage:'7/12',requiredBreakdown:'필수 6개 중 5개 충족',preferredBreakdown:'우대 6개 중 2개 충족',refScore:59,
+      evidence:[{title:'Figma 등 툴 숙련',tag:'필수',quote:'개인 프로젝트에서 Figma로 전체 화면을 설계했다고 답변했어요.',source:'인터뷰 답변 · 3번 문항'},
+        {title:'포트폴리오 제출',tag:'필수',quote:'캡스톤 프로젝트를 포트폴리오로 정리했다고 답변했어요.',source:'인터뷰 답변 · 3번 문항'}],
+      needsReview:[{title:'사용자 리서치 이해',kind:'필수',body:'리서치 방법론 경험이 확인되지 않았어요.',action:'문답으로 보완하기',href:'#/interview'},
+        {title:'디자인 시스템 이해',kind:'우대',body:'시스템 설계 경험이 확인되지 않았어요.',action:'경험 더 채우기',href:'#/interview'},
+        {title:'개발 협업 경험',kind:'우대',body:'개발자와의 협업 사례가 없어요.',action:'갭 리포트에서 보기',href:'#/gap-report'}]},
+    competitiveness:{refScore:56,items:[{title:'사용자 리서치 이해',evidence:false,freq:47,thickness:15},
+        {title:'Figma 등 툴 숙련',evidence:true,freq:66,thickness:72},{title:'프로토타이핑 경험',evidence:true,freq:39,thickness:50}]}}
+};
+function buildCustomField(label){
+  return {label:label||'직접 입력',
+    jobMap:{totalPostings:0,headerNote:'아직 데이터가 없어요. 관심 공고를 붙여넣으면 여기 기준이 채워져요.',
+      tiers:[{title:'거의 모든 공고',items:[{title:'공고를 요약하면 여기 채워져요',note:'추정치 없음'}]},
+        {title:'절반 정도',items:[{title:'공고를 요약하면 여기 채워져요',note:'추정치 없음'}]},
+        {title:'있으면 눈에 띔',items:[{title:'공고를 요약하면 여기 채워져요',note:'추정치 없음'}]}],
+      orderSteps:[{title:'공고 모으기',body:'관심 있는 공고 3~5개를 모아봐요.'},{title:'요약하기',body:'공고 요약 페이지에서 정리해봐요.'},{title:'대조하기',body:'내 경험과 대조해서 갭을 확인해요.'}],
+      examplePosting:'아직 예시가 없어요. 공고 요약 페이지에서 직접 붙여넣어봐요.'},
+    posting:{tags:[],summary:{duty:'아직 정리된 내용이 없어요.',requirement:'아직 정리된 내용이 없어요.',preferred:'아직 정리된 내용이 없어요.'}},
+    diagnosis:{company:'관심 기업',coverage:'0/0',requiredBreakdown:'아직 대조할 공고가 없어요.',preferredBreakdown:'아직 대조할 공고가 없어요.',refScore:0,evidence:[],needsReview:[]},
+    competitiveness:{refScore:0,items:[]}};
+}
+
+/* ---------- state helpers ---------- */
+function ls_get(k,d){try{const v=localStorage.getItem(k);return v===null?d:v}catch(e){return d}}
+function ls_set(k,v){try{localStorage.setItem(k,v)}catch(e){}}
+function ss_get(k){try{const v=sessionStorage.getItem(k);return v?JSON.parse(v):null}catch(e){return null}}
+function ss_set(k,v){try{sessionStorage.setItem(k,JSON.stringify(v))}catch(e){}}
+
+function getFieldId(){return ls_get('chafit:targetFieldId','semiconductor')}
+function getFieldLabel(){return ls_get('chafit:targetFieldLabel','')}
+function getField(){
+  const id=getFieldId();
+  if(id==='custom') return buildCustomField(getFieldLabel());
+  return FIELD_PRESETS[id]||FIELD_PRESETS.semiconductor;
+}
+function setField(id,label){ls_set('chafit:targetFieldId',id);ls_set('chafit:targetFieldLabel',label||'');route()}
+
+function getChecklist(){try{return JSON.parse(ls_get('chafit:checklist','[]'))}catch(e){return []}}
+function addChecklistItem(item){const list=getChecklist();if(list.some(i=>i.id===item.id))return;list.push(item);ls_set('chafit:checklist',JSON.stringify(list))}
+function removeChecklistItem(id){const list=getChecklist().filter(i=>i.id!==id);ls_set('chafit:checklist',JSON.stringify(list));route()}
+
+/* ---------- FieldSwitcher ---------- */
+function fieldSwitcher(){
+  const cur=getFieldId();
+  const presets=Object.keys(FIELD_PRESETS).map(id=>({id,label:FIELD_PRESETS[id].label}));
+  presets.push({id:'custom',label:getFieldId()==='custom'&&getFieldLabel()?getFieldLabel():'직접 입력'});
+  let html='<div class="fieldpills">'+presets.map(p=>
+    '<button class="chip'+(cur===p.id?' on':'')+'" onclick="onFieldPill(\''+p.id+'\')">'+p.label+'</button>'
+  ).join('')+'</div>';
+  if(cur==='custom'){
+    html+='<div id="customFieldBox" style="display:flex;gap:8px;margin:-8px 0 18px">'+
+      '<input class="textInput" id="customFieldInput" placeholder="예: 물류 운영" value="'+(getFieldLabel()||'')+'" style="max-width:240px">'+
+      '<button class="btn btn-ghost btn-sm" onclick="applyCustomField()">적용</button></div>';
+  }
+  return html;
+}
+function onFieldPill(id){
+  if(id==='custom'){setField('custom',getFieldLabel());return}
+  setField(id,FIELD_PRESETS[id].label);
+}
+function applyCustomField(){
+  const v=document.getElementById('customFieldInput').value.trim();
+  setField('custom',v||'직접 입력');
+}
+
+/* ---------- pages ---------- */
+const PAGES={};
+
+PAGES['/home']=()=>{
+  return '<div class="stepbar"><span class="dot on"></span><span class="dot"></span><span class="dot"></span> 1/3 단계 · 시작하기</div>'+
+  '<div class="hero"><div class="eyebrow">채용 FIT 진단</div><h1>지금 내 위치를 공고 기준으로 확인해요</h1>'+
+  '<p class="herosub">이력서가 없어도 시작할 수 있어요. 공고의 요구 항목과 내 경험을 근거로 대조해봐요.</p></div>'+
+  '<div class="statsstrip"><div><div class="statpct">58%</div><div class="statlabel">2·3학년</div></div>'+
+  '<div><div class="statpct">31%</div><div class="statlabel">4학년·졸업</div></div>'+
+  '<div><div class="statpct">11%</div><div class="statlabel">직무 전환</div></div>'+
+  '<div class="statfoot">chafit 이용자 412명 기준이에요</div></div>'+
+  '<div class="pathgrid">'+
+    '<div class="pathcard pathBlue"><div class="pathtag">갈래 1</div><h3 style="font-size:19px">이력서 파일이 있어요</h3>'+
+    '<div class="pathaudience">파일 업로드</div><p style="font-size:13.5px;color:var(--ink-soft);margin:0">가진 이력서로 바로 시작해봐요.</p>'+
+    '<div class="pathmeta">약 1분 소요</div><a class="btn btn-ghost" href="#/resume">이력서 올리기</a></div>'+
+    '<div class="pathcard pathFeatured"><div class="pathtag">갈래 2 · 가장 많이 선택</div><h3 style="font-size:19px;color:#fff">이력서는 아직 없어요</h3>'+
+    '<div class="pathaudience">문답으로 정리</div><p style="font-size:13.5px;margin:0">몇 가지 질문에 답하면 경험이 정리돼요.</p>'+
+    '<div class="pathmeta">약 4분 소요</div><a class="btn" style="background:var(--bg-raised);color:var(--warn)" href="#/interview">문답으로 시작</a></div>'+
+    '<div class="pathcard pathGreen"><div class="pathtag">갈래 3</div><h3 style="font-size:19px">뭘 준비할지 모르겠어요</h3>'+
+    '<div class="pathaudience">직무 지도부터</div><p style="font-size:13.5px;color:var(--ink-soft);margin:0">요구 역량 지도를 먼저 살펴봐요.</p>'+
+    '<div class="pathmeta">약 2분 소요</div><a class="btn btn-ghost" href="#/job-map">직무 지도 보기</a></div>'+
+  '</div>'+
+  '<div class="principles">'+
+    '<div class="principle"><h3>퍼센트 점수 대신 커버리지</h3><p>몇 %가 아니라 몇 개를 채웠는지로 보여줘요.</p></div>'+
+    '<div class="principle"><h3>추정치는 추정치라고 표시</h3><p>정확한 점수처럼 보이지 않게 라벨을 붙여요.</p></div>'+
+    '<div class="principle"><h3>제휴 없는 추천</h3><p>수수료나 제휴 없이 필요한 것만 추천해요.</p></div>'+
+  '</div>';
+};
+
+PAGES['/resume']=()=>{
+  const file=ss_get('chafit:resumeFile');
+  return pagehead('','이력서로 시작해요','파일을 올리면 바로 대조를 시작할 수 있어요.')+
+  '<div class="grid2">'+
+  '<div>'+
+    '<div class="dropzone" id="dz" ondragover="event.preventDefault();this.classList.add(\'drag\')" ondragleave="this.classList.remove(\'drag\')" ondrop="onDrop(event)">'+
+      ic('upload')+'<div style="margin-top:8px;font-weight:700">파일을 끌어다 놓거나</div>'+
+      '<label class="btn btn-ghost btn-sm" style="margin-top:10px;display:inline-flex">찾아보기<input type="file" accept=".pdf,.txt" style="display:none" onchange="onFilePick(event)"></label>'+
+      '<div style="font-size:12px;margin-top:8px;color:var(--ink-faint)">.pdf, .txt · 5MB 이하</div>'+
+    '</div>'+
+    (file?'<div class="filerow">'+ic('filetext')+'<div style="flex:1"><div style="font-weight:700;font-size:13.5px">'+file.name+'</div><div style="font-size:12px;color:var(--ink-faint)">'+file.size+'</div></div>'+
+      '<button class="btn btn-ghost btn-sm" onclick="clearFile()">'+ic('x')+'</button></div>':'')+
+    '<div id="fileErr" style="color:var(--bad);font-size:12.5px;margin-top:8px"></div>'+
+    '<div style="margin-top:20px;padding-top:18px;border-top:1px solid var(--line)"><div style="font-weight:700;font-size:14px;margin-bottom:6px">이력서가 없어도 돼요</div>'+
+    '<a class="btn btn-ghost btn-sm" href="#/interview">문답으로 만들기</a></div>'+
+  '</div>'+
+  '<div class="card">'+
+    '<div style="font-weight:700;margin-bottom:10px">동의하고 시작해요</div>'+
+    '<div class="checkrow"><input type="checkbox" id="c1" checked disabled><label for="c1">(필수) 처리 위탁에 동의해요</label></div>'+
+    '<div class="checkrow"><input type="checkbox" id="c2" onchange="updateConsent()"><label for="c2">(필수) 국외 이전에 동의해요 — 국가: 미국 · 항목: 이력서 텍스트 · 목적: 적합도 분석 · 보유: 세션 종료 시 삭제</label></div>'+
+    '<div class="checkrow"><input type="checkbox" id="c3" onchange="updateConsent()"><label for="c3">(선택) 진단 이력을 저장할래요</label></div>'+
+    '<div class="notice" style="margin-top:12px">'+ic('warn')+'<div>민감한 개인정보는 가리고 올려주세요.</div></div>'+
+    '<button class="btn btn-primary" id="submitResume" disabled style="margin-top:16px;width:100%" onclick="submitResume()">동의하고 분석 시작</button>'+
+  '</div></div>';
+};
+function onFilePick(e){handleFile(e.target.files&&e.target.files[0])}
+function onDrop(e){e.preventDefault();e.currentTarget.classList.remove('drag');handleFile(e.dataTransfer.files&&e.dataTransfer.files[0])}
+function handleFile(f){
+  const err=document.getElementById('fileErr');
+  if(!f){return}
+  const okType=/\.(pdf|txt)$/i.test(f.name);
+  if(!okType){err.textContent='.pdf 또는 .txt 파일만 올릴 수 있어요.';return}
+  if(f.size>5*1024*1024){err.textContent='5MB 이하 파일만 올릴 수 있어요.';return}
+  err.textContent='';
+  ss_set('chafit:resumeFile',{name:f.name,size:(f.size/1024).toFixed(0)+'KB'});
+  route();
+}
+function clearFile(){ss_set('chafit:resumeFile',null);route()}
+function updateConsent(){
+  const c2=document.getElementById('c2').checked;
+  const file=ss_get('chafit:resumeFile');
+  document.getElementById('submitResume').disabled=!(c2&&file);
+}
+function submitResume(){ss_set('chafit:resume',{done:true});location.hash='#/posting'}
+
+PAGES['/interview']=()=>{
+  let st=ss_get('chafit:interviewState')||{step:1,answers:{}};
+  window.__iv=st;
+  if(st.done) return interviewDone();
+  const Q=interviewQuestions();
+  const q=Q[st.step-1];
+  return pagehead('','경험 정리 '+st.step+'/7 · 중간 저장됨','')+
+  '<div style="height:6px;background:var(--bg-tint);border-radius:999px;margin-bottom:24px;overflow:hidden"><div style="height:100%;width:'+(st.step/7*100)+'%;background:var(--accent)"></div></div>'+
+  '<a href="#/job-map" style="font-size:12.5px;color:var(--ink-faint);display:inline-block;margin-bottom:14px">건너뛰고 직무 지도 보기 →</a>'+
+  '<div class="grid2">'+
+  '<div class="card"><div style="font-weight:700;font-size:17px;margin-bottom:14px">'+q.title+'</div>'+q.render(st)+
+    '<div class="rowflex" style="margin-top:22px">'+
+      (st.step>1?'<button class="btn btn-ghost" onclick="ivPrev()">이전</button>':'<span></span>')+
+      '<button class="btn btn-primary" onclick="ivNext()">'+(st.step===7?'정리 끝내기':'다음')+'</button>'+
+    '</div></div>'+
+  '<div class="card"><div style="font-weight:700;margin-bottom:10px">지금까지 모인 것</div>'+ivSummary(st)+'</div>'+
+  '</div>';
+};
+function interviewQuestions(){
+  const chip=(name,opts,multi)=>'<div style="display:flex;gap:8px;flex-wrap:wrap">'+opts.map(o=>{
+    const cur=window.__iv.answers[name]||(multi?[]:null);
+    const on=multi?cur.includes(o):cur===o;
+    return '<button class="chip'+(on?' on':'')+'" onclick="ivChip(\''+name+'\',\''+o+'\','+multi+')">'+o+'</button>';
+  }).join('')+'</div>';
+  return [
+    {key:'major',title:'전공이 뭐예요?',render:s=>'<input class="textInput" value="'+(s.answers.major||'')+'" oninput="ivText(\'major\',this.value)" placeholder="예: 신소재공학과">'},
+    {key:'status',title:'지금 상태가 어때요?',render:()=>chip('status',['1·2학년','3학년','4학년','졸업 준비','직무 전환'],false)},
+    {key:'experience',title:'해본 경험을 골라줘요',render:s=>chip('experience',['공정·장비실습','데이터분석 과제','캡스톤·팀프로젝트','학회·연구실','인턴','교내 공모전','자격증 준비','아르바이트·현장경험','해당없음'],true)+
+      '<textarea class="textarea" style="min-height:80px;margin-top:12px" placeholder="한 문장으로 더 설명해줘요" oninput="ivText(\'experienceNote\',this.value)">'+(s.answers.experienceNote||'')+'</textarea>'},
+    {key:'targetField',title:'어떤 직무를 목표로 해요?',render:()=>chip('targetField',['반도체 공정기술','SW 개발','마케팅','UX·제품 디자인','아직 미정'],false)},
+    {key:'certificate',title:'준비 중인 자격이 있어요?',render:()=>chip('certificate',['기사·산업기사','품질경영기사','토익·토스','관련 자격 없음'],true)},
+    {key:'internship',title:'인턴 경험이 있어요?',render:()=>chip('internship',['있음','없음','현재 지원 중'],false)},
+    {key:'worry',title:'가장 걱정되는 게 뭐예요?',render:()=>chip('worry',['경험 부족','방향이 불확실함','자기소개서 작성','정보 부족'],false)}
+  ];
+}
+function ivChip(name,val,multi){
+  const st=window.__iv;
+  if(multi){const arr=st.answers[name]||[];const i=arr.indexOf(val);i>-1?arr.splice(i,1):arr.push(val);st.answers[name]=arr}
+  else{st.answers[name]=val}
+  if(name==='targetField'){
+    const map={'반도체 공정기술':'semiconductor','SW 개발':'software','마케팅':'marketing','UX·제품 디자인':'design'};
+    if(map[val]) setField(map[val],val);
+  }
+  ss_set('chafit:interviewState',st);renderApp();
+}
+function ivText(name,val){window.__iv.answers[name]=val;ss_set('chafit:interviewState',window.__iv)}
+function ivPrev(){window.__iv.step--;ss_set('chafit:interviewState',window.__iv);renderApp()}
+function ivNext(){
+  const st=window.__iv;
+  if(st.step===7){st.done=true}else{st.step++}
+  ss_set('chafit:interviewState',st);renderApp();
+}
+function ivSummary(st){
+  const a=st.answers;
+  const rows=[['전공',a.major],['상태',a.status],['경험',(a.experience||[]).join(', ')],['목표 직무',a.targetField],['자격',(a.certificate||[]).join(', ')],['인턴',a.internship],['고민',a.worry]];
+  return rows.filter(r=>r[1]).map(r=>'<div style="font-size:13px;padding:6px 0;border-bottom:1px solid var(--line)"><span style="color:var(--ink-faint)">'+r[0]+'</span> · '+r[1]+'</div>').join('')||'<div style="font-size:13px;color:var(--ink-faint)">아직 답한 내용이 없어요.</div>';
+}
+function interviewDone(){
+  return '<div class="card" style="text-align:center;padding:50px 30px">'+ic('checksquare')+
+  '<h2 style="font-size:22px;margin:14px 0 8px">정리가 끝났어요</h2>'+
+  '<p style="color:var(--ink-soft);font-size:14px">이제 채용공고를 넣어 대조해볼 수 있어요.</p>'+
+  '<a class="btn btn-primary" href="#/posting" style="margin-top:14px">채용공고 입력하러 가기</a></div>';
+}
+
+PAGES['/job-map']=()=>{
+  const f=getField();const tab=window.__jmTab||'tiers';
+  const tabs=[['tiers','요구 역량 지도'],['order','준비 순서'],['example','공고 예시']];
+  let body='';
+  if(tab==='tiers'){
+    body=f.jobMap.tiers.map(t=>'<div class="card" style="margin-bottom:14px"><div style="font-weight:700;margin-bottom:10px">'+t.title+'</div>'+
+      t.items.map(i=>'<div class="rowflex" style="padding:8px 0;border-bottom:1px solid var(--line)"><span style="font-size:14px">'+i.title+'</span>'+
+      '<span style="font-size:12.5px;color:var(--ink-faint)">'+(i.count!==undefined?f.jobMap.totalPostings+'건 중 '+i.count+'건':i.note)+'</span></div>').join('')+
+      '</div>').join('')+
+      '<div class="notice"><span>이 중 내가 이미 한 것을 표시해볼까요?</span></div>'+
+      '<a class="btn btn-primary" href="#/interview" style="margin-top:12px">문답으로 표시하기</a>';
+  } else if(tab==='order'){
+    body=f.jobMap.orderSteps.map((s,idx)=>'<div class="card" style="margin-bottom:14px;display:flex;gap:14px"><div style="font-family:var(--font-head);font-size:20px;color:var(--accent)">'+(idx+1)+'</div><div><div style="font-weight:700;margin-bottom:4px">'+s.title+'</div><div style="font-size:13.5px;color:var(--ink-soft)">'+s.body+'</div></div></div>').join('');
+  } else {
+    body='<div class="notice-warn notice" style="margin-bottom:14px">'+ic('warn')+'<span>실제 공고를 그대로 가져온 게 아니라 예시로 만든 문구예요.</span></div>'+
+    '<div class="card" style="font-family:var(--font-sans);white-space:pre-wrap;font-size:14px;line-height:1.8">'+f.jobMap.examplePosting+'</div>';
+  }
+  return pagehead('','요구 역량 지도',f.jobMap.headerNote)+fieldSwitcher()+
+  '<div class="tabs">'+tabs.map(t=>'<button class="tabbtn'+(tab===t[0]?' on':'')+'" onclick="setJmTab(\''+t[0]+'\')">'+t[1]+'</button>').join('')+'</div>'+body;
+};
+function setJmTab(t){window.__jmTab=t;renderApp()}
+
+PAGES['/posting']=()=>{
+  const f=getField();const ready=window.__postingReady;const inTab=window.__postingTab||'paste';
+  return pagehead('','긴 채용공고를 세 줄로 정리해요','')+fieldSwitcher()+
+  '<div class="tabs">'+
+    '<button class="tabbtn'+(inTab==='paste'?' on':'')+'" onclick="setPostingTab(\'paste\')">본문 붙여넣기</button>'+
+    '<button class="tabbtn'+(inTab==='link'?' on':'')+'" onclick="setPostingTab(\'link\')">기업 채용페이지 링크</button>'+
+  '</div>'+
+  (inTab==='paste'?'<textarea class="textarea" placeholder="'+f.jobMap.examplePosting.replace(/"/g,'&quot;')+'"></textarea>':
+    '<input class="textInput" placeholder="https://company.example.com/careers/123">')+
+  '<div class="notice" style="margin:14px 0">'+ic('warn')+'<span>사람인·잡코리아·원티드 등에서 자동으로 긁어오지 않아요. 직접 붙여넣어야 해요.</span></div>'+
+  '<div style="display:flex;gap:10px">'+
+    '<button class="btn btn-primary" onclick="setPostingReady()">요약하고 대조하기</button>'+
+    '<button class="btn btn-ghost" onclick="setPostingReady()">요약만 보기</button>'+
+  '</div>'+
+  (ready?postingReadyBlock(f):'');
+};
+function setPostingTab(t){window.__postingTab=t;renderApp()}
+function setPostingReady(){window.__postingReady=true;window.__tags=window.__tags||JSON.parse(JSON.stringify(getField().posting.tags));renderApp()}
+function postingReadyBlock(f){
+  const tags=window.__tags||f.posting.tags;
+  return '<div class="card" style="margin-top:20px">'+
+    '<div class="rowflex" style="margin-bottom:10px"><span style="font-weight:700">요약</span></div>'+
+    ['duty','requirement','preferred'].map((k,i)=>'<div style="font-size:13.5px;padding:8px 0;border-bottom:1px solid var(--line)"><b>'+['담당업무','자격요건','우대사항'][i]+'</b> · '+f.posting.summary[k]+'</div>').join('')+
+    '<div style="margin-top:16px;display:flex;gap:8px;flex-wrap:wrap">'+tags.map((t,i)=>
+      '<button class="chip'+(t.required?' on':'')+'" onclick="toggleTag('+i+')">'+t.label+'</button>').join('')+'</div>'+
+    '<a class="btn btn-primary" href="#/diagnosis" style="margin-top:18px" onclick="savePosting()">적합도 진단서 입력에 사용</a>'+
+  '</div>';
+}
+function toggleTag(i){window.__tags[i].required=!window.__tags[i].required;renderApp()}
+function savePosting(){ss_set('chafit:posting',{done:true})}
+
+PAGES['/diagnosis']=()=>{
+  const f=getField();const d=f.diagnosis;const showScore=window.__showScore;
+  return '<div class="rowflex" style="margin-bottom:18px"><div><div class="crumb">적합도 진단서 · 2026.08.23</div><h1 class="pagetitle" style="font-size:22px">'+d.company+' · '+f.label+'</h1></div>'+
+  '<div style="display:flex;gap:8px"><button class="btn btn-ghost btn-sm" onclick="window.print()">PDF로 저장</button><a class="btn btn-ghost btn-sm" href="#/posting">다른 공고로 진단</a></div></div>'+
+  '<div class="notice-warn notice" style="margin-bottom:18px">'+ic('warn')+'<span>이건 추정치예요. chafit은 어떤 기업과도 제휴하지 않아요.</span></div>'+
+  '<div class="card" style="display:flex;gap:20px;align-items:center;margin-bottom:18px">'+blob(56)+
+    '<div><div style="font-size:28px;font-weight:800;font-family:var(--font-head)">'+d.coverage+'</div>'+
+    '<span class="badge badge-good">필수 요건 대부분 충족</span>'+
+    '<div style="font-size:13px;color:var(--ink-soft);margin-top:6px">'+d.requiredBreakdown+' · '+d.preferredBreakdown+'</div></div></div>'+
+  '<div class="togglewrap" style="margin-bottom:18px"><button class="toggle'+(showScore?' on':'')+'" onclick="toggleScore()"><span class="knob"></span></button> 참고 점수 보기</div>'+
+  (showScore?'<div class="card" style="margin-bottom:18px"><div style="font-size:26px;font-weight:800">'+d.refScore+'점</div><span class="badge badge-neutral">추정치 · chafit 내부 계산</span></div>':'')+
+  '<div class="card" style="margin-bottom:18px"><div style="font-weight:700;margin-bottom:8px">근거가 확인된 항목</div>'+
+    (d.evidence.length?d.evidence.map(e=>'<div class="evrow">'+ic('check')+'<div><div style="font-weight:600;font-size:14px">'+e.title+' <span class="badge badge-accent" style="margin-left:4px">'+e.tag+'</span></div><div style="font-size:13px;color:var(--ink-soft);margin-top:2px">"'+e.quote+'"</div><div style="font-size:12px;color:var(--ink-faint);margin-top:2px">'+e.source+'</div></div></div>').join(''):'<div style="font-size:13.5px;color:var(--ink-faint)">아직 확인된 근거가 없어요.</div>')+
+  '</div>'+
+  '<div class="card"><div style="font-weight:700;margin-bottom:8px">확인이 필요한 항목</div>'+
+    (d.needsReview.length?d.needsReview.map(e=>'<div class="evrow">'+ic('warn')+'<div><div style="font-weight:600;font-size:14px">'+e.title+' <span class="badge badge-warn" style="margin-left:4px">'+e.kind+'</span></div><div style="font-size:13px;color:var(--ink-soft);margin-top:2px">'+e.body+'</div><a href="'+e.href+'" style="font-size:12.5px;color:var(--accent-strong);font-weight:700">'+e.action+' →</a></div></div>').join(''):'<div style="font-size:13.5px;color:var(--ink-faint)">확인할 항목이 없어요.</div>')+
+    '<div style="font-size:12px;color:var(--ink-faint);margin-top:10px">"근거 없음"이 "역량 없음"을 뜻하지는 않아요.</div>'+
+  '</div>'+
+  '<a class="btn btn-primary" href="#/gap-report" style="margin-top:18px">갭 리포트 보기</a>';
+};
+function toggleScore(){window.__showScore=!window.__showScore;renderApp()}
+function blob(size){return '<svg width="'+size+'" height="'+size+'" viewBox="0 0 40 40" class="mascot"><path fill="#e4ebfc" d="M20 3c8 0 15 5 16 13 1 9-6 21-16 21S2 25 3 16C4 8 12 3 20 3Z"/><circle cx="15" cy="18" r="2.4" fill="#5f7fcb"/><circle cx="25" cy="18" r="2.4" fill="#5f7fcb"/><path d="M14 25c2.5 2.5 9.5 2.5 12 0" stroke="#5f7fcb" stroke-width="2" stroke-linecap="round" fill="none"/></svg>'}
+
+PAGES['/gap-report']=()=>{
+  const added=getChecklist().map(i=>i.id);
+  const item1Added=added.includes('gap-1');
+  return '<div class="crumb">갭 리포트 · '+getField().diagnosis.company+' 진단서에서 이어져요</div>'+
+  '<div class="rowflex" style="margin-bottom:18px"><h1 class="pagetitle">비어 있는 4개 항목</h1><span class="badge badge-neutral">제휴 없음 · 수수료 받지 않아요</span></div>'+
+  '<div class="card" style="margin-bottom:16px"><div class="rowflex" style="margin-bottom:12px"><div style="font-weight:700">산포개선 · 파이썬</div><span class="badge badge-bad">우선순위 높음</span></div>'+
+  '<div class="grid2">'+
+    '<div class="card" style="box-shadow:none;background:var(--bg-tint)"><div style="font-weight:700;font-size:13.5px;margin-bottom:6px">오늘 가능 · 글로 보완</div><a href="#/interview" style="font-size:13px;color:var(--accent-strong);font-weight:700">문장 다듬으러 가기 →</a></div>'+
+    '<div class="card" style="box-shadow:none;background:var(--bg-tint)"><div style="font-weight:700;font-size:13.5px;margin-bottom:6px">2~4주 · 실제로 할 것</div>'+
+      '<button class="btn '+(item1Added?'btn-ghost':'btn-primary')+' btn-sm" '+(item1Added?'disabled':'')+' onclick="addGapItem(\'gap-1\',\'파이썬 데이터분석 스터디\')">'+(item1Added?'담았어요 ✓':'담기')+'</button></div>'+
+  '</div></div>'+
+  '<div class="card"><div class="rowflex" style="margin-bottom:12px"><div style="font-weight:700">SPC·DOE</div><span class="badge badge-warn">우선순위 중간</span></div>'+
+  '<div class="grid3">'+
+    gapOption('교내 무료 스터디','SPC 통계 스터디','매주 2시간 · 무료','gap-2')+
+    gapOption('자격증 과목','품질경영기사 이론','약 4주 · 유료 강의 있음','gap-3')+
+    gapOption('연구실 인턴','통계공정 연구실','학기 단위 · 경쟁 있음','gap-4')+
+  '</div></div>'+
+  '<div style="font-size:12px;color:var(--ink-faint);margin-top:14px">추천 대가로 받는 수수료는 없고, 결과를 보장하지도 않아요.</div>';
+};
+function gapOption(kind,title,reason,id){
+  const on=getChecklist().some(i=>i.id===id);
+  return '<div class="card" style="box-shadow:none;background:var(--bg-tint)"><div style="font-size:12px;color:var(--ink-faint);font-weight:700">'+kind+'</div>'+
+  '<div style="font-weight:700;margin:4px 0">'+title+'</div><div style="font-size:12.5px;color:var(--ink-soft);margin-bottom:10px">'+reason+'</div>'+
+  '<button class="btn '+(on?'btn-ghost':'btn-primary')+' btn-sm" '+(on?'disabled':'')+' onclick="addGapItem(\''+id+'\',\''+title+'\')">'+(on?'담았어요 ✓':'담기')+'</button></div>';
+}
+function addGapItem(id,title){addChecklistItem({id,title,meta:'갭 리포트에서 추가',addedFrom:'갭 리포트'});renderApp()}
+
+PAGES['/competitiveness']=()=>{
+  const f=getField();const mode=window.__cMode||'thickness';
+  return pagehead('',f.label+' 요구사항 대비 내 위치','막대는 실력 점수가 아니라 참고 지표예요.')+fieldSwitcher()+
+  '<div class="tabs">'+
+    '<button class="tabbtn'+(mode==='thickness'?' on':'')+'" onclick="setCMode(\'thickness\')">내 근거 두께</button>'+
+    '<button class="tabbtn'+(mode==='freq'?' on':'')+'" onclick="setCMode(\'freq\')">공고 등장 빈도</button>'+
+  '</div>'+
+  '<div class="card" style="margin-bottom:18px">'+
+    (f.competitiveness.items.length?f.competitiveness.items.map(it=>{
+      const val=mode==='thickness'?it.thickness:it.freq;
+      return '<div style="padding:12px 0;border-bottom:1px solid var(--line)"><div class="rowflex" style="margin-bottom:6px"><span style="font-size:14px;font-weight:600">'+it.title+'</span>'+
+      '<span style="font-size:12.5px;color:'+(it.evidence?'var(--good)':'var(--warn)')+'">'+(it.evidence?'근거 있음':'근거 없음')+' · 공고 '+it.freq+'%</span></div>'+
+      '<div class="bar-outer"><div class="bar-inner" style="width:'+val+'%;background:'+(it.evidence?'var(--good)':'var(--warn)')+'"></div></div></div>';
+    }).join(''):'<div style="font-size:13.5px;color:var(--ink-faint)">아직 데이터가 없어요.</div>')+
+  '</div>'+
+  '<div class="grid3">'+
+    '<div class="card"><div style="font-weight:700;margin-bottom:6px">지금 상태</div><p style="font-size:13.5px;color:var(--ink-soft);margin:0">근거가 확인된 항목부터 채워가고 있어요.</p></div>'+
+    '<div class="card"><div style="font-weight:700;margin-bottom:6px">3학년 2학기에 할 것</div><ol style="font-size:13.5px;color:var(--ink-soft);margin:0;padding-left:18px"><li>근거 없는 필수 항목 보완</li><li>데이터 프로젝트 1개 완성</li><li>관심 기업 공고 재대조</li></ol></div>'+
+    '<div class="card"><div style="font-weight:700;margin-bottom:6px">2~3년 뒤</div><p style="font-size:13.5px;color:var(--ink-soft);margin:0">우대 항목까지 근거로 채워봐요.</p></div>'+
+  '</div>'+
+  '<div style="font-size:12px;color:var(--ink-faint);margin-top:14px">참고 지표 · 가중 커버리지 '+f.competitiveness.refScore+' · 추정치예요.</div>';
+};
+function setCMode(m){window.__cMode=m;renderApp()}
+
+PAGES['/companies']=()=>{
+  const rows=window.__companyRows||(window.__companyRows=[
+    {name:'삼성전자 DS',role:'반도체공정기술',cov:'9/12',delta:'+1',verdict:'대부분 충족',tone:'good',bell:true},
+    {name:'SK하이닉스',role:'소재개발',cov:'7/11',delta:'+1',verdict:'대부분 충족',tone:'good',bell:false},
+    {name:'LG이노텍',role:'공정엔지니어',cov:'5/12',delta:'+1',verdict:'부분 충족',tone:'warn',bell:false},
+    {name:'DB하이텍',role:'품질관리',cov:'4/10',delta:'변화없음',verdict:'확인 필요',tone:'bad',bell:false},
+    {name:'네이버',role:'백엔드개발',cov:'7/11',delta:'+1',verdict:'대부분 충족',tone:'good',bell:true}
+  ]);
+  return '<div class="rowflex" style="margin-bottom:18px"><h1 class="pagetitle">관심 기업 5곳의 커버리지를 추적해요</h1><button class="btn btn-ghost btn-sm" onclick="alert(\'준비 중인 기능이에요\')">공고 추가</button></div>'+
+  '<div class="grid3" style="margin-bottom:20px">'+
+    '<div class="card"><div style="font-size:13px;color:var(--ink-soft)">경험 1개 추가 후</div><div style="font-weight:700;margin-top:4px">3곳 항목 증가</div></div>'+
+    '<div class="card"><div style="font-size:13px;color:var(--ink-soft)">마감 임박</div><div style="font-weight:700;margin-top:4px">2건 · 7일 내</div></div>'+
+    '<div class="card"><div style="font-size:13px;color:var(--ink-soft)">공통으로 비어있음</div><div style="font-weight:700;margin-top:4px">데이터분석 · 협업문서역량</div></div>'+
+  '</div>'+
+  '<div class="tablewrap"><table><thead><tr><th>기업 · 직무</th><th>커버리지</th><th>판정</th><th>다음에 채울 항목</th><th>알림</th></tr></thead><tbody>'+
+    rows.map((r,i)=>'<tr><td><b>'+r.name+'</b><div style="font-size:12px;color:var(--ink-faint)">'+r.role+'</div></td>'+
+      '<td style="font-variant-numeric:tabular-nums">'+r.cov+' <span style="color:var(--ink-faint);font-size:12px">'+r.delta+'</span></td>'+
+      '<td><span class="badge badge-'+r.tone+'">'+r.verdict+'</span></td>'+
+      '<td style="font-size:13px;color:var(--ink-soft)">데이터분석 근거 보완</td>'+
+      '<td><button class="btn btn-ghost btn-sm" onclick="toggleBell('+i+')">'+ic(r.bell?'bellring':'bell')+'</button></td></tr>').join('')+
+  '</tbody></table></div>'+
+  '<div style="font-size:12px;color:var(--ink-faint);margin-top:14px">공고 마감·요건 변경은 실제와 다를 수 있어요.</div>';
+};
+function toggleBell(i){window.__companyRows[i].bell=!window.__companyRows[i].bell;renderApp()}
+
+PAGES['/cover-letter']=()=>{
+  const Q=window.__clQ||(window.__clQ=[
+    {label:'문항 1',title:'지원 동기를 서술하세요',match:'근거 2건 매칭',weak:false,ev:[{title:'전공 관련성',tag:'경험',quote:'관련 전공을 이수하며 관심을 가졌다고 답변했어요.',angle:'동기 연결'},{title:'교내 프로젝트',tag:'경험',quote:'캡스톤에서 관련 주제를 다뤘다고 답변했어요.',angle:'실행력'}],structure:'동기 → 관련 경험 → 입사 후 목표 순서로 써봐요.'},
+    {label:'문항 2',title:'직무 역량을 보여줄 경험을 서술하세요',match:'근거 1건 매칭 · 보강 권장',weak:true,ev:[{title:'통계 스터디',tag:'경험',quote:'SPC 스터디에서 데이터를 분석했다고 답변했어요.',angle:'역량 증거'}],structure:'상황 → 행동 → 결과 순서로, 수치를 넣어봐요.'},
+    {label:'문항 3',title:'입사 후 목표를 서술하세요',match:'근거 2건 매칭',weak:false,ev:[{title:'목표 직무 응답',tag:'경험',quote:'구체적인 목표 직무를 답변했어요.',angle:'방향성'},{title:'준비 계획',tag:'경험',quote:'추가로 준비할 자격을 답변했어요.',angle:'실행 계획'}],structure:'단기 목표 → 장기 목표 → 회사와의 연결 순서로 써봐요.'}
+  ]);
+  const sel=window.__clSel||0;const q=Q[sel];const draft=window.__clDraft;
+  return '<div class="crumb">자소서 매핑 · '+getField().diagnosis.company+'</div>'+
+  '<div class="rowflex" style="margin-bottom:18px"><h1 class="pagetitle">문항별로 근거를 대조해요</h1><span class="badge badge-neutral">초안 · 제출용 아님</span></div>'+
+  '<div class="grid2">'+
+  '<div>'+Q.map((qq,i)=>'<div class="card" style="margin-bottom:12px;cursor:pointer;'+(i===sel?'box-shadow:var(--sh-md)':'')+'" onclick="selCL('+i+')">'+
+    '<div style="font-size:12px;color:var(--ink-faint);font-weight:700">'+qq.label+'</div><div style="font-weight:700;margin:4px 0">'+qq.title+'</div>'+
+    '<span class="badge '+(qq.weak?'badge-warn':'badge-good')+'">'+qq.match+'</span></div>').join('')+'</div>'+
+  '<div class="card">'+
+    (q.weak?'<div class="notice-warn notice" style="margin-bottom:14px">'+ic('warn')+'<span>근거가 약해요. 문답을 더 채우면 좋아요.</span></div>':'')+
+    q.ev.map(e=>'<div class="evrow">'+ic('check')+'<div><div style="font-weight:600;font-size:14px">'+e.title+' <span class="badge badge-accent" style="margin-left:4px">'+e.tag+'</span></div><div style="font-size:13px;color:var(--ink-soft);margin-top:2px">"'+e.quote+'"</div><div style="font-size:12px;color:var(--ink-faint)">'+e.angle+'</div></div></div>').join('')+
+    '<div class="card" style="background:var(--bg-tint);box-shadow:none;margin-top:14px"><div style="font-weight:700;font-size:13.5px;margin-bottom:4px">문단 구조 제안</div><div style="font-size:13px;color:var(--ink-soft)">'+q.structure+'</div></div>'+
+    '<div style="font-size:12px;color:var(--ink-faint);margin-top:12px">chafit이 대신 써주지는 않아요.</div>'+
+    (draft?'<textarea class="textarea" style="margin-top:12px" placeholder="내 문장으로 써봐요"></textarea>':'<button class="btn btn-ghost" style="margin-top:14px" onclick="showDraft()">내 문장으로 쓰기</button>')+
+  '</div></div>';
+};
+function selCL(i){window.__clSel=i;window.__clDraft=false;renderApp()}
+function showDraft(){window.__clDraft=true;renderApp()}
+
+PAGES['/history']=()=>{
+  return '<div class="card" style="text-align:center;padding:60px 30px;border:2px dashed var(--line);box-shadow:none;background:transparent">'+ic('clock')+
+  '<h2 style="font-size:20px;margin:14px 0 8px">아직 준비 중인 기능이에요</h2>'+
+  '<p style="color:var(--ink-soft);font-size:14px;max-width:360px;margin:0 auto">진단 이력을 시간 순으로 모아보는 기능을 준비하고 있어요.</p>'+
+  '<a class="btn btn-ghost" href="#/diagnosis" style="margin-top:16px">최근 진단서 보기</a></div>';
+};
+
+PAGES['/checklist']=()=>{
+  const list=getChecklist();
+  if(!list.length) return '<div class="card" style="text-align:center;padding:60px 30px">'+ic('listchecks')+
+    '<h2 style="font-size:20px;margin:14px 0 8px">아직 담은 항목이 없어요</h2>'+
+    '<a class="btn btn-primary" href="#/gap-report" style="margin-top:10px">갭 리포트에서 담아보기</a></div>';
+  return pagehead('','체크리스트','')+list.map(i=>'<div class="card" style="display:flex;align-items:center;gap:12px;margin-bottom:10px">'+ic('checksquare')+
+    '<div style="flex:1"><div style="font-weight:600;font-size:14px">'+i.title+'</div><div style="font-size:12px;color:var(--ink-faint)">'+i.meta+' · '+i.addedFrom+'</div></div>'+
+    '<button class="btn btn-ghost btn-sm" onclick="removeChecklistItem(\''+i.id+'\')">'+ic('trash')+'</button></div>').join('');
+};
+
+function pagehead(crumb,title,sub){
+  return '<div class="pagehead">'+(crumb?'<div class="crumb">'+crumb+'</div>':'')+'<h1 class="pagetitle">'+title+'</h1>'+(sub?'<div class="pagesub">'+sub+'</div>':'')+'</div>';
+}
+
+function route(){
+  const path=(location.hash||'#/home').slice(1);
+  const fn=PAGES[path]||PAGES['/home'];
+  document.getElementById('app').innerHTML=fn();
+}
+function renderApp(){route()}
+renderPanel();route();
+</script>
