@@ -1,0 +1,188 @@
+.topRow {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+.targetBadge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  background: var(--bg-tint);
+  border-radius: var(--radius-sm);
+  padding: 8px 16px;
+}
+
+.targetBadge span.faint {
+  color: var(--ink-faint);
+  font-weight: 500;
+}
+
+.tabs {
+  display: flex;
+  gap: 4px;
+  border-bottom: 1px solid var(--line);
+  margin-bottom: 28px;
+}
+
+.tab {
+  padding: 10px 4px;
+  margin-right: 24px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--ink-faint);
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+}
+
+.tabActive {
+  color: var(--ink);
+  border-bottom-color: var(--accent);
+}
+
+.methodNote {
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  margin-bottom: 28px;
+  line-height: 1.6;
+}
+
+.tierGroup {
+  margin-bottom: 24px;
+}
+
+.tierHead {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.tierNum {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--bg-raised);
+  background: var(--ink-faint);
+  border-radius: 999px;
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.tier1 .tierNum {
+  background: var(--accent);
+  color: var(--accent-ink);
+}
+
+.tier2 .tierNum {
+  background: var(--warn);
+}
+
+.tierLabel {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.tierRows {
+  display: grid;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.tierRow {
+  background: var(--bg-raised);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 18px;
+  font-size: 14px;
+}
+
+.tierRowTitle {
+  font-weight: 600;
+}
+
+.tierRowCount {
+  font-size: 12.5px;
+  color: var(--ink-faint);
+  white-space: nowrap;
+  font-variant-numeric: tabular-nums;
+}
+
+.ctaBar {
+  margin-top: 32px;
+  border-radius: var(--radius-lg);
+  background: var(--accent-soft);
+  padding: 24px 28px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.ctaText {
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--accent-strong);
+}
+
+/* Order tab */
+.orderSteps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.orderStep {
+  display: grid;
+  grid-template-columns: 32px 1fr;
+  gap: 14px;
+}
+
+.orderIndex {
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+  font-weight: 800;
+  font-size: 13px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orderTitle {
+  font-size: 14.5px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.orderBody {
+  font-size: 13px;
+  color: var(--ink-soft);
+  line-height: 1.6;
+}
+
+/* Example tab */
+.exampleBlock {
+  white-space: pre-line;
+  font-size: 13.5px;
+  line-height: 1.7;
+  background: var(--bg-tint);
+  border-radius: var(--radius-md);
+  padding: 22px 24px;
+}
