@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import AnalysisSummary from '@/components/AnalysisSummary';
+import CareerOutlook from '@/components/CareerOutlook';
 import EntryChoice from '@/components/EntryChoice';
 import ErrorBanner from '@/components/ErrorBanner';
 import FitReport from '@/components/FitReport';
@@ -189,6 +190,9 @@ export default function Home() {
 
         {/* ⑤ */}
         {report && <FitReport report={report} />}
+
+        {/* 성장 로드맵 — 경력공고 비교(신규). 코퍼스에 페어가 없으면 조용히 숨는다 */}
+        {report && <CareerOutlook analysis={analysis} posting={posting} />}
       </div>
     </main>
   );

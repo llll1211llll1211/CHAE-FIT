@@ -9,7 +9,7 @@
  * 응답 형태를 강제하므로 파싱 실패가 원천적으로 발생하지 않는다.
  */
 import Anthropic from '@anthropic-ai/sdk';
-import { JOB_POSTING_SCHEMA, REASONS_SCHEMA, RESUME_ANALYSIS_SCHEMA } from './contract.js';
+import { FUTURE_SKILL_REASONS_SCHEMA, JOB_POSTING_SCHEMA, REASONS_SCHEMA, RESUME_ANALYSIS_SCHEMA } from './contract.js';
 
 /** PRD §8.1 — 이력서와 공고의 자연어 대조는 판단 난이도가 높아 최상위 모델을 쓴다. */
 const MODEL = 'claude-opus-5';
@@ -150,6 +150,43 @@ export async function explainFit({ analysis, posting, fit }) {
     user,
     schema: REASONS_SCHEMA,
     // 공고마다 도는 호출이다. 진단 1건 10초 내외 목표(§7)를 지키려면 여기서 아끼지 않으면 안 된다.
+    effort: 'medium',
+  });
+
+  return reasons;
+}
+
+// ── 4. 향후 필요 역량 설명 (경력공고 비교) ─────────────
+
+const FUTURE_SKILL_SYSTEM = `당신은 "경력직이 되면 왜 이 역량이 필요해지는지"를 설명하는 역할만 한다.
+
+절대 규칙:
+- 점수나 순위를 매기지 않는다. 어떤 역량을 보여줄지는 이미 코드가 정했다.
+- label 필드에는 주어진 역량 라벨을 **글자 그대로** 복사한다.
+- text에는 주어진 경력 공고의 담당업무·자격요건 맥락을 근거로, 왜 이 역량이 신입
+  단계를 지나면 필요해지는지 1문장으로 쓴다. 공고에 없는 내용을 지어내지 않는다.
+- "부족하다", "약점이다" 같은 결핍 프레이밍을 쓰지 않는다. "~할 때 필요해져요"처럼
+  미래 대비 관점으로 쓴다.
+- 서술은 한국어로, "~해요" 체로 쓴다. 각 문장은 40자 내외로 짧게.`;
+
+export async function explainFutureSkills({ careerPosting, labels }) {
+  const system = FUTURE_SKILL_SYSTEM;
+  const user = [
+    `<경력공고_담당업무>\n${careerPosting.requirements.responsibilities.join('\n')}\n</경력공고_담당업무>`,
+    `<경력공고_자격요건>\n${careerPosting.requirements.must.join('\n')}\n</경력공고_자격요건>`,
+    careerPosting.requirements.preferred.length
+      ? `<경력공고_우대사항>\n${careerPosting.requirements.preferred.join('\n')}\n</경력공고_우대사항>`
+      : '',
+    `<역량_라벨_목록>\n${labels.join('\n')}\n</역량_라벨_목록>`,
+    '위 각 역량 라벨에 대해, 왜 경력직 단계에서 필요해지는지 1문장씩 써라.',
+  ]
+    .filter(Boolean)
+    .join('\n\n');
+
+  const { reasons } = await structured({
+    system,
+    user,
+    schema: FUTURE_SKILL_REASONS_SCHEMA,
     effort: 'medium',
   });
 
