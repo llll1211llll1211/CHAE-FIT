@@ -139,7 +139,15 @@ input[type="file"] { display: none; }
 .submit:hover:not(:disabled) { background: var(--brand-dark); }
 .submit:disabled { background: #dfe3ea; color: #9aa2b1; cursor: not-allowed; }
 
-.privacy { margin: 16px 0 0; font-size: 12.5px; color: var(--text-mute); text-align: center; }
+.card__hint--tip { margin-top: -14px; color: var(--text-sub); }
+
+.consent {
+  display: flex; align-items: flex-start; gap: 9px; margin-top: 16px;
+  padding: 13px 15px; border: 1px solid var(--border); border-radius: 11px;
+  background: var(--inset); font-size: 12.5px; color: var(--text-sub);
+  line-height: 1.55; cursor: pointer;
+}
+.consent input[type="checkbox"] { flex: none; margin-top: 2px; width: 15px; height: 15px; accent-color: var(--brand); }
 
 /* ── 로딩 (LoadingIndicator) ───────────────────────── */
 .loading {
@@ -373,6 +381,91 @@ input[type="file"] { display: none; }
   .score { flex-direction: column; align-items: flex-start; gap: 14px; padding: 18px; }
   .score__body { width: 100%; }
   .tabs { flex-direction: column; }
+}
+
+/* ══════════════════════════════════════════════════════
+   첫 화면 분기 (EntryChoice) · 직접 입력 폼 (ManualEntrySection)
+   ══════════════════════════════════════════════════════ */
+
+.choices { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.choice {
+  background: var(--surface); border: 1.5px solid var(--border-strong); border-radius: var(--radius);
+  padding: 24px 22px; text-align: left; cursor: pointer; font-family: inherit;
+  transition: border-color .15s, background .15s;
+}
+.choice:hover, .choice:focus-visible { border-color: var(--brand); background: var(--brand-weak); outline: none; }
+.choice__icon { font-size: 26px; line-height: 1; }
+.choice__title { margin-top: 12px; font-size: 15.5px; font-weight: 700; letter-spacing: -.02em; }
+.choice__desc { margin: 5px 0 0; font-size: 13px; color: var(--text-mute); }
+
+.linkbtn--back { margin: 0 0 12px; padding-left: 0; }
+
+.radiogroup { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.radiogroup label {
+  display: flex; align-items: center; gap: 6px; padding: 9px 14px;
+  border: 1px solid var(--border-strong); border-radius: 9px;
+  font-size: 13.5px; font-weight: 600; color: var(--text-sub); cursor: pointer;
+}
+.radiogroup input[type="radio"] { accent-color: var(--brand); }
+.radiogroup .input { width: 90px; flex: none; }
+
+.field { display: flex; flex-direction: column; gap: 6px; }
+.field__label { font-size: 12.5px; font-weight: 600; color: var(--text-sub); }
+.field__label--optional { color: var(--text-mute); font-weight: 500; }
+
+.formgrid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px 14px; margin-bottom: 12px; }
+.formgrid .field:only-child { grid-column: 1 / -1; }
+
+.accordion { border: 1px solid var(--border); border-radius: 12px; }
+.accordion + .accordion { margin-top: 8px; }
+.accordion__head {
+  width: 100%; display: flex; align-items: center; justify-content: space-between;
+  gap: 10px; padding: 14px 16px; background: var(--inset); border: 0; border-radius: 12px;
+  cursor: pointer; font-family: inherit; text-align: left;
+}
+.accordion.is-open .accordion__head { border-radius: 12px 12px 0 0; }
+.accordion__title { font-size: 14px; font-weight: 700; letter-spacing: -.02em; }
+.accordion__headRight { display: flex; align-items: center; gap: 8px; }
+.accordion__meta { font-size: 12.5px; color: var(--text-mute); font-weight: 500; }
+.accordion__chevron { color: var(--text-mute); transition: transform .15s; flex: none; }
+.accordion.is-open .accordion__chevron { transform: rotate(180deg); }
+.accordion__body { padding: 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 12px; }
+
+.entrycard {
+  border: 1px solid var(--border); border-radius: 11px; padding: 15px 16px;
+  background: var(--surface); display: flex; flex-direction: column; gap: 10px;
+}
+.entrycard + .entrycard { margin-top: 10px; }
+.entrycard__remove { align-self: flex-end; margin-top: 0; color: var(--danger); }
+.entrycard__remove:hover { background: var(--danger-weak); }
+
+.addbtn {
+  border: 1.5px dashed var(--border-strong); background: transparent; border-radius: 10px;
+  padding: 11px; width: 100%; font-family: inherit; font-size: 13.5px; font-weight: 600;
+  color: var(--text-sub); cursor: pointer; margin-top: 8px;
+}
+.addbtn:hover { border-color: var(--brand); color: var(--brand-dark); background: var(--brand-weak); }
+
+.tagInput {
+  display: flex; flex-wrap: wrap; gap: 7px; align-items: center;
+  padding: 9px 10px; border: 1px solid var(--border-strong); border-radius: 11px;
+  background: var(--inset);
+}
+.tagInput input {
+  flex: 1; min-width: 140px; border: 0; background: transparent;
+  font-family: inherit; font-size: 13.5px; padding: 5px 2px; outline: none; color: var(--text);
+}
+.chip { font-family: inherit; }
+button.chip { cursor: pointer; }
+.chip--removable { display: inline-flex; align-items: center; gap: 5px; }
+.chip__x {
+  border: 0; background: transparent; cursor: pointer; color: inherit;
+  font-size: 11px; line-height: 1; padding: 0;
+}
+
+@media (max-width: 640px) {
+  .choices { grid-template-columns: 1fr; }
+  .formgrid { grid-template-columns: 1fr; }
 }
 
 /* 데모 샘플 표시 — 프리필된 값이 자기 것으로 오해되지 않게 한다 */
