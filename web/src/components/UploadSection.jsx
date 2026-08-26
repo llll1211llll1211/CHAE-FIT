@@ -23,11 +23,13 @@ function extensionOf(name) {
   return i === -1 ? '' : name.slice(i + 1).toLowerCase();
 }
 
-export default function UploadSection({ status, onAnalyze, onError, onClearError, initialFile }) {
+export default function UploadSection({ status, onAnalyze, onError, onClearError, initialFile, onBack }) {
   const inputRef = useRef(null);
   // 데모 프리필은 초기값으로만 들어온다. 이후에는 사용자 선택이 유일한 출처다.
   const [file, setFile] = useState(initialFile ?? null);
   const [isDragover, setDragover] = useState(false);
+  // 외부 AI 전송(처리위탁·국외이전) 동의. 체크 전에는 분석을 시작할 수 없다.
+  const [consented, setConsented] = useState(false);
   const isSample = file !== null && file === initialFile;
 
   const isAnalyzing = status === 'analyzing';
@@ -67,8 +69,16 @@ export default function UploadSection({ status, onAnalyze, onError, onClearError
 
   return (
     <section className="card" aria-labelledby="uploadTitle">
+      {onBack && (
+        <button className="linkbtn linkbtn--back" type="button" onClick={onBack}>
+          ← 다른 방법으로 시작
+        </button>
+      )}
       <h2 className="card__title" id="uploadTitle">이력서 업로드</h2>
       <p className="card__hint">PDF 또는 .txt 파일, 5MB 이하만 업로드할 수 있어요.</p>
+      <p className="card__hint card__hint--tip">
+        💡 텍스트를 직접 입력해 만든 PDF를 권장해요. 스캔하거나 사진으로 찍은 PDF는 글자를 인식하지 못할 수 있어요.
+      </p>
 
       {!isAnalyzing && (
         <>
@@ -116,10 +126,23 @@ export default function UploadSection({ status, onAnalyze, onError, onClearError
             </div>
           )}
 
+          <label className="consent">
+            <input
+              type="checkbox"
+              checked={consented}
+              onChange={(e) => setConsented(e.target.checked)}
+            />
+            <span>
+              이력서 내용은 적합도 분석을 위해 외부 AI(Anthropic Claude API, 국외 서버)로
+              전송·처리위탁되며, 분석 목적 외에는 사용되지 않고 세션 종료 시 삭제돼요.
+              위 내용에 동의해야 분석을 시작할 수 있어요.
+            </span>
+          </label>
+
           <button
             className="submit"
             type="button"
-            disabled={!file}
+            disabled={!file || !consented}
             onClick={() => onAnalyze(file)}
           >
             분석하기
@@ -128,10 +151,6 @@ export default function UploadSection({ status, onAnalyze, onError, onClearError
       )}
 
       <LoadingIndicator status={status} />
-
-      <p className="privacy">
-        업로드한 이력서는 분석 목적으로만 사용하며, 세션 종료 시 삭제됩니다.
-      </p>
     </section>
   );
 }

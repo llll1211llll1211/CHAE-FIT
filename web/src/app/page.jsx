@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 import AnalysisSummary from '@/components/AnalysisSummary';
+import EntryChoice from '@/components/EntryChoice';
 import ErrorBanner from '@/components/ErrorBanner';
 import FitReport from '@/components/FitReport';
 import LoadingIndicator from '@/components/LoadingIndicator';
+import ManualEntrySection from '@/components/ManualEntrySection';
 import PostingInput from '@/components/PostingInput';
 import PostingSummary from '@/components/PostingSummary';
 import UploadSection from '@/components/UploadSection';
@@ -26,6 +28,11 @@ export default function Home() {
   const [analysis, setAnalysis] = useState(null);
   const [posting, setPosting] = useState(null);
   const [report, setReport] = useState(null);
+
+  // 이력서 있음(upload) / 없음(manual) 분기. analysis가 생기기 전까지만 의미가 있다.
+  const [entryMode, setEntryMode] = useState(null);
+  // 직접 입력 시 나온 PDF 전용 필드(기본정보·학력 등). 진단에는 쓰이지 않는다 — PDF 추출 기능이 생기면 그때 쓴다.
+  const [profile, setProfile] = useState(null);
 
   // 데모 프리필. File은 한 번만 만든다 — 매 렌더마다 새로 만들면 "데모 샘플" 표시가 깨진다.
   const [sampleFile] = useState(() => (DEMO_PREFILL ? sampleResumeFile() : null));
@@ -80,12 +87,20 @@ export default function Home() {
     }
   }
 
+  function handleManualComplete(result, manualProfile) {
+    setProfile(manualProfile);
+    setAnalysis(result);
+    setStatus('analyzed');
+  }
+
   function handleReset() {
     setStatus('idle');
     setErrorMessage(null);
     setAnalysis(null);
     setPosting(null);
     setReport(null);
+    setEntryMode(null);
+    setProfile(null);
   }
 
   const isLoading = status === 'parsing' || status === 'diagnosing';
@@ -116,8 +131,8 @@ export default function Home() {
           <ol className="steps">
             <li className="step">
               <span className="step__no">1</span>
-              <div className="step__title">이력서 업로드</div>
-              <p className="step__desc">PDF 또는 텍스트 파일</p>
+              <div className="step__title">이력서 업로드 또는 직접 입력</div>
+              <p className="step__desc">이력서가 없어도 경력·활동을 입력해 시작할 수 있어요</p>
             </li>
             <li className="step">
               <span className="step__no">2</span>
@@ -136,15 +151,22 @@ export default function Home() {
       <ErrorBanner message={errorMessage} onClose={() => setErrorMessage(null)} />
 
       <div className="stack">
-        {/* ① — analysis가 생기면 자리를 비운다 (§9.3) */}
-        {!analysis && (
+        {/* ① — analysis가 생기면 자리를 비운다 (§9.3). 그 전에는 이력서 유무로 먼저 분기한다. */}
+        {!analysis && !entryMode && <EntryChoice onChoose={setEntryMode} />}
+
+        {!analysis && entryMode === 'upload' && (
           <UploadSection
             status={status}
             onAnalyze={handleAnalyze}
             onError={setErrorMessage}
             onClearError={() => setErrorMessage(null)}
             initialFile={sampleFile}
+            onBack={() => setEntryMode(null)}
           />
+        )}
+
+        {!analysis && entryMode === 'manual' && (
+          <ManualEntrySection onComplete={handleManualComplete} onBack={() => setEntryMode(null)} />
         )}
 
         {/* ② */}
