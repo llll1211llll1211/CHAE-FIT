@@ -6,11 +6,12 @@ import { postJson } from '@/lib/api/client';
 /**
  * 성장 로드맵 — 경력공고 비교 (신규 기능)
  *
- * ⑤ 적합도 진단서 아래에, 코퍼스에 이 회사·직무의 경력직 페어가 있을 때만 조용히
- * 나타난다. **점수·퍼센트를 절대 표시하지 않는다** — "부족하다"가 아니라
- * "다음 단계에 필요해진다"는 프레이밍만 쓴다(사용자 요구사항의 핵심 제약).
+ * 코퍼스에 이 회사·직무의 경력직 페어가 있을 때만 실제 로드맵을 보여준다.
+ * **점수·퍼센트를 절대 표시하지 않는다** — "부족하다"가 아니라 "다음 단계에
+ * 필요해진다"는 프레이밍만 쓴다(사용자 요구사항의 핵심 제약).
  *
- * 매칭 실패는 에러가 아니라 조용한 침묵이다 — FitReport의 hasSkillInfo와 같은 원칙.
+ * 사이드바에서 독립된 페이지로 들어오므로, 매칭 실패도 빈 화면이 아니라
+ * 안내 카드로 보여준다(§9.1과 달리 여기서는 "조용한 침묵"을 쓰지 않는다).
  */
 export default function CareerOutlook({ analysis, posting }) {
   const [state, setState] = useState({ status: 'loading', data: null });
@@ -24,7 +25,6 @@ export default function CareerOutlook({ analysis, posting }) {
         if (!cancelled) setState({ status: 'done', data });
       })
       .catch(() => {
-        // 이 섹션은 부가 정보다. 실패해도 진단서 자체는 이미 완결됐으므로 조용히 숨긴다.
         if (!cancelled) setState({ status: 'done', data: { matched: false } });
       });
 
@@ -33,7 +33,29 @@ export default function CareerOutlook({ analysis, posting }) {
     };
   }, [analysis, posting]);
 
-  if (state.status === 'loading' || !state.data?.matched) return null;
+  if (state.status === 'loading') {
+    return (
+      <section className="card card--outlook" aria-labelledby="careerOutlookTitle">
+        <div className="card__head">
+          <h2 className="card__title" id="careerOutlookTitle">성장 로드맵</h2>
+        </div>
+        <p className="block__empty">경력직 공고를 비교하고 있어요...</p>
+      </section>
+    );
+  }
+
+  if (!state.data?.matched) {
+    return (
+      <section className="card card--outlook" aria-labelledby="careerOutlookTitle">
+        <div className="card__head">
+          <h2 className="card__title" id="careerOutlookTitle">성장 로드맵</h2>
+        </div>
+        <p className="block__empty">
+          이 공고는 아직 비교할 경력직 데이터가 없어요. 데이터가 쌓이는 대로 여기서 보여드릴게요.
+        </p>
+      </section>
+    );
+  }
 
   const { company, careerTitle, experienceYears, collectedAt, futureSkills } = state.data;
 
@@ -44,9 +66,9 @@ export default function CareerOutlook({ analysis, posting }) {
         <span className="pill pill--mute">표준 템플릿 추정 · {collectedAt} 수집</span>
       </div>
       <p className="card__hint">
-        {company}의 경력직({careerTitle}, {experienceYears}) 공고를 기준으로, 신입 입사 후
-        단계적으로 필요해지는 역량이에요. 지금 없다고 감점되는 게 아니라, 다음 단계를
-        준비할 방향이에요.
+        입사 후 이 팀에 자연스럽게 적응하려면 다음에 뭐가 필요할까요.
+        {company}의 경력직({careerTitle}, {experienceYears}) 공고를 기준으로 짚어드려요.
+        지금 없다고 감점되는 게 아니라, 다음 단계를 준비할 방향이에요.
       </p>
 
       {futureSkills.length > 0 ? (

@@ -9,18 +9,7 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="ko">
-      <body>
-        <header className="header">
-          <div className="header__inner">
-            <div className="logo">
-              <span className="logo__mark">C</span>
-              채피티
-              <span className="logo__sub">chafit</span>
-            </div>
-          </div>
-        </header>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   );
 }
