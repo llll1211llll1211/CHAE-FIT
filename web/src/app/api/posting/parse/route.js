@@ -8,7 +8,7 @@
  */
 import { fail, USE_MOCK } from '@/lib/api/contract';
 import { parsePosting } from '@/lib/api/claude';
-import { MOCK_JOB_POSTING, MOCK_VAGUE_POSTING } from '@/lib/api/mock';
+import { MOCK_JOB_POSTING, MOCK_SEMI_POSTING, MOCK_VAGUE_POSTING } from '@/lib/api/mock';
 import { fetchPostingText } from '@/lib/posting/fetch-url';
 import { normalizeSkills, unknownTokens } from '@/lib/skills/normalize';
 
@@ -38,8 +38,17 @@ export async function POST(request) {
         e.code = 'URL_FETCH_FAILED';
         throw e;
       }
-      // "요구 역량 추출 실패" 경로도 밟아볼 수 있게 한다(PRD §9.1 ⑤).
-      raw = /전산직|성실|무관/.test(text) ? MOCK_VAGUE_POSTING : MOCK_JOB_POSTING;
+      // 목업도 입력에 반응한다 — 키 없이 세 갈래를 모두 밟아볼 수 있게.
+      //   ① 빈약한 공고 → 요구 역량 추출 실패 경로(PRD §9.1 ⑤)
+      //   ② 반도체 설비기술 → 경력공고 코퍼스에 실제로 있는 페어. 성장 로드맵이 뜬다.
+      //   ③ 그 외 → 기본 IT 백엔드 공고
+      if (/전산직|성실|무관/.test(text)) {
+        raw = MOCK_VAGUE_POSTING;
+      } else if (/설비기술|반도체 생산설비|삼성전자 DS/.test(text)) {
+        raw = MOCK_SEMI_POSTING;
+      } else {
+        raw = MOCK_JOB_POSTING;
+      }
     } else {
       const source = url ? await fetchPostingText(url) : text;
       raw = await parsePosting(source);

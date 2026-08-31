@@ -8,7 +8,7 @@ import LoadingIndicator from '@/components/LoadingIndicator';
 import PostingInput from '@/components/PostingInput';
 import PostingSummary from '@/components/PostingSummary';
 import { postJson } from '@/lib/api/client';
-import { DEMO_PREFILL, SAMPLE_POSTING_TEXT } from '@/lib/demo/samples';
+import { DEMO_PREFILL, DEMO_TRACKS } from '@/lib/demo/samples';
 import { useSession } from '@/lib/session/SessionContext';
 import { useStepGuard } from '@/lib/session/useStepGuard';
 
@@ -20,13 +20,14 @@ import { useStepGuard } from '@/lib/session/useStepGuard';
  */
 export default function PostingPage() {
   const router = useRouter();
-  const { analysis, posting, report, setPosting, setDiagnosis } = useSession();
+  const { analysis, posting, report, demoTrack, setPosting, setDiagnosis } = useSession();
   const { ready } = useStepGuard('analysis');
 
   const [status, setStatus] = useState('analyzed');
   const [errorMessage, setErrorMessage] = useState(null);
 
-  const samplePosting = DEMO_PREFILL ? SAMPLE_POSTING_TEXT : undefined;
+  // 이력서와 같은 트랙의 공고를 채운다 — 둘이 다른 직무면 진단이 어긋난다.
+  const samplePosting = DEMO_PREFILL ? DEMO_TRACKS[demoTrack].postingText : undefined;
   const isLoading = status === 'parsing' || status === 'diagnosing';
 
   /**

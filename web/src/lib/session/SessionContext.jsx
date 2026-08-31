@@ -24,6 +24,9 @@ const EMPTY = {
   profile: null,
   // 새 진단서가 나온 뒤 로드맵을 아직 열어보지 않았는지. 사이드바 알림 점의 근거다.
   roadmapSeen: false,
+  // 데모 프리필 트랙. 이력서와 공고가 같은 직무를 말하도록 두 화면이 공유한다.
+  // 실서비스(DEMO_PREFILL=0)에서는 아무 데도 쓰이지 않는다.
+  demoTrack: 'it',
 };
 
 const SessionContext = createContext(null);
@@ -69,6 +72,12 @@ export function SessionProvider({ children }) {
     setState((s) => ({ ...s, posting, report, roadmapSeen: false }));
   }, []);
 
+  const setDemoTrack = useCallback((demoTrack) => {
+    // 트랙을 바꾸면 이전 트랙으로 만든 결과는 전부 버린다 — 이력서와 공고가
+    // 서로 다른 직무를 말하는 화면이 남으면 데모가 어긋난다.
+    setState((s) => ({ ...EMPTY, demoTrack }));
+  }, []);
+
   const markRoadmapSeen = useCallback(() => {
     setState((s) => (s.roadmapSeen ? s : { ...s, roadmapSeen: true }));
   }, []);
@@ -88,8 +97,11 @@ export function SessionProvider({ children }) {
   }, []);
 
   const value = useMemo(
-    () => ({ ...state, hydrated, setAnalysis, setDiagnosis, setPosting, markRoadmapSeen, reset }),
-    [state, hydrated, setAnalysis, setDiagnosis, setPosting, markRoadmapSeen, reset]
+    () => ({
+      ...state, hydrated,
+      setAnalysis, setDiagnosis, setPosting, setDemoTrack, markRoadmapSeen, reset,
+    }),
+    [state, hydrated, setAnalysis, setDiagnosis, setPosting, setDemoTrack, markRoadmapSeen, reset]
   );
 
   return <SessionContext.Provider value={value}>{children}</SessionContext.Provider>;

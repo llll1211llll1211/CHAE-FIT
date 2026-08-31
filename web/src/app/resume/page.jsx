@@ -1,14 +1,14 @@
 'use client';
 
 import { useRouter, useSearchParams } from 'next/navigation';
-import { Suspense, useState } from 'react';
+import { Suspense, useMemo, useState } from 'react';
 import AnalysisSummary from '@/components/AnalysisSummary';
 import EntryChoice from '@/components/EntryChoice';
 import ErrorBanner from '@/components/ErrorBanner';
 import ManualEntrySection from '@/components/ManualEntrySection';
 import UploadSection from '@/components/UploadSection';
 import { postFile } from '@/lib/api/client';
-import { DEMO_PREFILL, sampleResumeFile } from '@/lib/demo/samples';
+import { DEMO_PREFILL, DEMO_TRACKS } from '@/lib/demo/samples';
 import { useSession } from '@/lib/session/SessionContext';
 
 /**
@@ -30,7 +30,7 @@ export default function ResumePage() {
 function ResumeStep() {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { analysis, setAnalysis } = useSession();
+  const { analysis, demoTrack, setDemoTrack, setAnalysis } = useSession();
 
   const [status, setStatus] = useState('idle');
   const [errorMessage, setErrorMessage] = useState(null);
@@ -41,8 +41,12 @@ function ResumeStep() {
     modeFromUrl === 'upload' || modeFromUrl === 'manual' ? modeFromUrl : null
   );
 
-  // 데모 프리필. File은 한 번만 만든다 — 매 렌더마다 새로 만들면 "데모 샘플" 표시가 깨진다.
-  const [sampleFile] = useState(() => (DEMO_PREFILL ? sampleResumeFile() : null));
+  // 데모 프리필. File은 트랙당 한 번만 만든다 — 매 렌더마다 새로 만들면
+  // UploadSection의 "데모 샘플" 표시(file === initialFile 비교)가 깨진다.
+  const sampleFile = useMemo(
+    () => (DEMO_PREFILL ? DEMO_TRACKS[demoTrack].resumeFile() : null),
+    [demoTrack]
+  );
 
   async function handleAnalyze(file) {
     setErrorMessage(null);
@@ -86,6 +90,10 @@ function ResumeStep() {
       </section>
 
       <div className="stack">
+        {DEMO_PREFILL && !analysis && (
+          <TrackSwitcher current={demoTrack} onChange={setDemoTrack} />
+        )}
+
         {!analysis && !entryMode && <EntryChoice onChoose={setEntryMode} />}
 
         {!analysis && entryMode === 'upload' && (
@@ -113,5 +121,33 @@ function ResumeStep() {
         )}
       </div>
     </>
+  );
+}
+
+/**
+ * 데모 트랙 전환 — 프리필이 켜져 있을 때만 보인다.
+ *
+ * 트랙마다 이력서와 공고가 짝을 이룬다. 반도체 트랙만이 경력공고 코퍼스와 매칭되어
+ * 성장 로드맵·국비지원 강의까지 이어진다. 시연 중에 그 경로를 바로 보여주기 위한 것이다.
+ */
+function TrackSwitcher({ current, onChange }) {
+  return (
+    <section className="demotrack" aria-label="데모 샘플 트랙">
+      <span className="demotrack__tag">데모 샘플</span>
+      <div className="demotrack__opts">
+        {Object.values(DEMO_TRACKS).map((track) => (
+          <button
+            key={track.id}
+            type="button"
+            className={`demotrack__opt${current === track.id ? ' is-active' : ''}`}
+            onClick={() => onChange(track.id)}
+            aria-pressed={current === track.id}
+          >
+            <span className="demotrack__label">{track.label}</span>
+            <span className="demotrack__note">{track.note}</span>
+          </button>
+        ))}
+      </div>
+    </section>
   );
 }

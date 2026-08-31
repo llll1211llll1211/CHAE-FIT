@@ -6,7 +6,7 @@
  */
 import { fail, USE_MOCK } from '@/lib/api/contract';
 import { analyzeResume } from '@/lib/api/claude';
-import { MOCK_RESUME_ANALYSIS } from '@/lib/api/mock';
+import { MOCK_RESUME_ANALYSIS, MOCK_SEMI_RESUME_ANALYSIS } from '@/lib/api/mock';
 import { extractResumeText } from '@/lib/resume/extract-text';
 import { normalizeSkills, unknownTokens } from '@/lib/skills/normalize';
 
@@ -32,9 +32,15 @@ export async function POST(request) {
   if (file.size > MAX_SIZE) return fail('FILE_TOO_LARGE');
 
   try {
-    const raw = USE_MOCK
-      ? MOCK_RESUME_ANALYSIS
-      : await analyzeResume(await extractResumeText(file, ext));
+    // 목업도 입력을 본다 — 반도체 트랙 샘플을 올리면 그에 맞는 분석 결과를 돌려준다.
+    // 공고와 이력서가 서로 다른 직무를 말하면 데모가 어긋나기 때문이다.
+    let raw;
+    if (USE_MOCK) {
+      const peek = ext === 'txt' ? await file.text().catch(() => '') : '';
+      raw = /설비기술|반도체|진공|PLC/.test(peek) ? MOCK_SEMI_RESUME_ANALYSIS : MOCK_RESUME_ANALYSIS;
+    } else {
+      raw = await analyzeResume(await extractResumeText(file, ext));
+    }
 
     // LLM이 낸 원문 표기를 스킬 사전으로 정규화한다.
     // 이력서 쪽 U 와 공고 쪽 R 이 같은 사전을 통과해야 집합 연산이 성립한다(PRD §8.5).

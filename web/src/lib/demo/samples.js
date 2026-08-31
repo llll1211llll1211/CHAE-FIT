@@ -92,3 +92,93 @@ export const SAMPLE_POSTING_TEXT = `㈜누리테크 백엔드 개발자 채용 (
 export function sampleResumeFile() {
   return new File([SAMPLE_RESUME_TEXT], SAMPLE_RESUME_NAME, { type: 'text/plain' });
 }
+
+/* ══════════════════════════════════════════════════════
+   반도체 트랙 샘플
+
+   위 IT 백엔드 샘플로는 성장 로드맵이 뜨지 않는다 — 경력공고 코퍼스가
+   반도체·디스플레이·이차전지로 구성돼 있어 ㈜누리테크는 매칭되지 않기 때문이다.
+   로드맵과 국비지원 강의 추천까지 보여주려면 코퍼스에 실제로 있는 공고를 써야 한다.
+
+   대상 페어: 삼성전자 DS부문 / 설비기술. 경력 공고가 신입 대비 추가로 요구하는
+   '머신러닝 모델링'·'구매·SCM' 두 태그 모두 국비지원 강의가 붙어 있다.
+   ══════════════════════════════════════════════════════ */
+
+export const SAMPLE_SEMI_RESUME_NAME = '샘플_이력서_반도체설비신입.txt';
+
+export const SAMPLE_SEMI_RESUME_TEXT = `이력서
+
+■ 인적사항
+성명: 박서연
+학력: 한국대학교 기계공학과 졸업예정 (2027.02)
+
+■ 보유 기술
+설비 유지보수, PLC, 진공 장비, CAD, Python
+
+■ 주요 경험
+
+1. 학부 연구실 진공 증착 장비 운용 (2026.03 ~ 2027.02, 1년)
+진공 챔버의 배기·압력 계통을 점검하고 소모품 교체 주기를 기록했습니다.
+챔버 압력 로그를 Python으로 정리해 이상 구간을 표시하는 스크립트를 만들었습니다.
+
+2. 반도체 장비사 현장실습 (2026.07 ~ 2026.09, 3개월)
+신규 설비 셋업 절차를 따라가며 PLC 시퀀스 동작을 확인했습니다.
+기구 도면을 CAD로 수정하는 작업을 보조했습니다.
+
+3. 캡스톤 — 설비 예지보전 미니 프로젝트 (2026.03 ~ 2026.12)
+공개 설비 센서 데이터로 고장 전 구간의 패턴을 살펴보고
+관리도를 그려 이상 신호를 판별했습니다.
+`;
+
+export const SAMPLE_SEMI_POSTING_TEXT = `삼성전자 DS부문 설비기술 신입 채용 (3급 정기공채)
+
+[모집부문] 설비기술
+[근무지] 경기 화성 / 경기 평택 / 충남 온양
+[고용형태] 정규직
+
+[주요업무]
+- 반도체 생산설비의 성능 유지 및 가동률 향상
+- 설비 이상 발생 시 원인 분석 및 조치
+- 신규 설비 셋업과 자동화·지능화 개선
+
+[자격요건]
+- 학사 이상 (기계공학, 전자공학, 메카트로닉스, 화학공학)
+- 기계·전자 기초 지식
+- 설비 구조와 동작 원리를 파악하는 이해력
+
+[우대사항]
+- 장비 실습 또는 설비 운용 경험
+- PLC·제어 관련 지식
+- 설비 데이터 기반 예지보전 관심자
+
+[전형절차] 서류전형 → GSAT → 직무 면접 → 임원 면접
+`;
+
+export function sampleSemiResumeFile() {
+  return new File([SAMPLE_SEMI_RESUME_TEXT], SAMPLE_SEMI_RESUME_NAME, { type: 'text/plain' });
+}
+
+/**
+ * 데모 트랙 — 화면에서 골라 쓴다.
+ *
+ * `it`은 진단서 품질을 보여주기 좋고, `semi`는 성장 로드맵과 강의 추천까지 이어진다.
+ * 트랙마다 이력서와 공고가 짝을 이뤄야 한다 — 둘이 다른 직무를 말하면 데모가 어긋난다.
+ */
+export const DEMO_TRACKS = {
+  it: {
+    id: 'it',
+    label: 'IT 백엔드',
+    note: '적합도 진단서가 잘 나오는 케이스',
+    resumeFile: sampleResumeFile,
+    postingText: SAMPLE_POSTING_TEXT,
+  },
+  semi: {
+    id: 'semi',
+    label: '반도체 설비기술',
+    note: '성장 로드맵 · 국비지원 강의까지 이어지는 케이스',
+    resumeFile: sampleSemiResumeFile,
+    postingText: SAMPLE_SEMI_POSTING_TEXT,
+  },
+};
+
+export const DEFAULT_DEMO_TRACK = 'it';
