@@ -69,7 +69,7 @@ export async function fetchPostingText(rawUrl) {
       signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: {
         // 봇 차단 페이지 대신 실제 문서를 받을 확률을 올린다.
-        'user-agent': 'Mozilla/5.0 (compatible; chafit/1.0; +https://chafit.vercel.app)',
+        'user-agent': 'Mozilla/5.0 (compatible; CHAE-FIT/1.0; +https://chae-fit.vercel.app)',
         accept: 'text/html,application/xhtml+xml',
         'accept-language': 'ko-KR,ko;q=0.9',
       },

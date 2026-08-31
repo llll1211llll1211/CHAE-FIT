@@ -4,7 +4,7 @@
 |---|---|
 | 버전 | v1 (MVP) |
 | 기준 문서 | `docs/PRD_SCREEN_통합.md` v0.3 |
-| Base URL | `https://chafit.vercel.app` / 로컬 `http://localhost:3000` |
+| Base URL | `https://chae-fit.vercel.app` / 로컬 `http://localhost:3000` |
 | 형식 | 요청·응답 모두 JSON (이력서 업로드만 `multipart/form-data`) |
 
 > **이 문서는 사본이고, 정본은 코드다.**
