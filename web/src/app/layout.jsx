@@ -21,7 +21,7 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata = {
-  title: '채피티 — 이 공고, 내 경험으로 지원해도 될까?',
+  title: 'CHAE-FIT — 이 공고, 내 경험으로 지원해도 될까?',
   description:
     '이력서와 채용공고를 대조해 충족 역량 · 필요 역량 · 판단 근거를 담은 적합도 진단서를 만들어 드립니다.',
 };

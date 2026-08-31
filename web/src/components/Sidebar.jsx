@@ -89,7 +89,7 @@ export default function Sidebar() {
     <aside className={styles.sidebar}>
       <Link href="/" className={styles.brand}>
         <Mark size={20} />
-        <span>chafit</span>
+        <span>CHAE-FIT</span>
       </Link>
 
       <nav className={styles.nav} aria-label="주요 기능">

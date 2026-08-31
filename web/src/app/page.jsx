@@ -35,7 +35,7 @@ export default function Landing() {
             <span className="stats__pct">11%</span>
             <span className="stats__text">직무 전환</span>
           </div>
-          <span className="stats__foot">chafit 이용자 412명 기준</span>
+          <span className="stats__foot">CHAE-FIT 이용자 412명 기준</span>
         </section>
 
         <section className="paths" aria-label="시작 방법">
