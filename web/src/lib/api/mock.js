@@ -105,3 +105,11 @@ export function mockReasons(matchedSkills) {
   const picked = pool.filter((r) => matched.has(r.needs));
   return picked.map(({ needs, ...rest }) => rest);
 }
+
+/** 경력공고 비교 — "향후 필요 역량" 설명 목업. 주어진 라벨 각각에 그럴듯한 문장을 붙인다. */
+export function mockFutureSkillReasons(labels) {
+  return labels.map((label) => ({
+    label,
+    text: `경력직 공고에서는 ${label} 관련 과제를 직접 리딩하는 역할을 맡게 돼요.`,
+  }));
+}

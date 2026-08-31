@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import AnalysisSummary from '@/components/AnalysisSummary';
+import CareerOutlook from '@/components/CareerOutlook';
 import EntryChoice from '@/components/EntryChoice';
 import ErrorBanner from '@/components/ErrorBanner';
 import FitReport from '@/components/FitReport';
@@ -9,15 +10,16 @@ import LoadingIndicator from '@/components/LoadingIndicator';
 import ManualEntrySection from '@/components/ManualEntrySection';
 import PostingInput from '@/components/PostingInput';
 import PostingSummary from '@/components/PostingSummary';
+import Sidebar from '@/components/Sidebar';
 import UploadSection from '@/components/UploadSection';
 import { postFile, postJson } from '@/lib/api/client';
 import { DEMO_PREFILL, SAMPLE_POSTING_TEXT, sampleResumeFile } from '@/lib/demo/samples';
 
 /**
- * 채피티 단일 페이지 (PRD §9)
+ * 채피티 메인 화면 (PRD §9)
  *
- * 상태 흐름: idle → analyzing → analyzed → parsing → parsed → diagnosing → diagnosed
- * 로그인·라우팅 없이 ①~⑤ 섹션이 한 화면에서 순차적으로 열린다.
+ * 사이드바로 세 기능을 분리한다 — 이력서 분석 / 채용공고 진단 / 성장 로드맵.
+ * 뒤 페이지는 앞 페이지 데이터가 없으면 사이드바에서 잠긴다(goToPage가 막는다).
  *
  * **이력서 분석 결과(analysis)는 여기 한 곳에만 보관한다.** 공고를 바꿔 진단할 때
  * 재분석하지 않고 이 값을 재전송한다 — 공고 N건 진단 = 이력서 분석 1회 + 공고 분석 N회(§8.5).
@@ -34,9 +36,20 @@ export default function Home() {
   // 직접 입력 시 나온 PDF 전용 필드(기본정보·학력 등). 진단에는 쓰이지 않는다 — PDF 추출 기능이 생기면 그때 쓴다.
   const [profile, setProfile] = useState(null);
 
+  // 사이드바로 분리된 세 페이지. 뒤 페이지는 데이터가 없으면 goToPage가 이동을 막는다.
+  const [activePage, setActivePage] = useState('resume');
+  const [visitedRoadmap, setVisitedRoadmap] = useState(false);
+
   // 데모 프리필. File은 한 번만 만든다 — 매 렌더마다 새로 만들면 "데모 샘플" 표시가 깨진다.
   const [sampleFile] = useState(() => (DEMO_PREFILL ? sampleResumeFile() : null));
   const samplePosting = DEMO_PREFILL ? SAMPLE_POSTING_TEXT : undefined;
+
+  function goToPage(page) {
+    if (page === 'posting' && !analysis) return;
+    if (page === 'roadmap' && !report) return;
+    setActivePage(page);
+    if (page === 'roadmap') setVisitedRoadmap(true);
+  }
 
   async function handleAnalyze(file) {
     setErrorMessage(null);
@@ -46,6 +59,7 @@ export default function Home() {
       const { analysis: result } = await postFile('/api/resume/analyze', 'resume', file);
       setAnalysis(result);
       setStatus('analyzed');
+      setActivePage('posting');
     } catch (err) {
       setStatus('idle');
       setErrorMessage(err.message);
@@ -81,6 +95,7 @@ export default function Home() {
       });
       setReport(result);
       setStatus('diagnosed');
+      setVisitedRoadmap(false);
     } catch (err) {
       setStatus('parsed');
       setErrorMessage(err.message);
@@ -91,6 +106,7 @@ export default function Home() {
     setProfile(manualProfile);
     setAnalysis(result);
     setStatus('analyzed');
+    setActivePage('posting');
   }
 
   function handleReset() {
@@ -101,95 +117,127 @@ export default function Home() {
     setReport(null);
     setEntryMode(null);
     setProfile(null);
+    setActivePage('resume');
+    setVisitedRoadmap(false);
   }
 
   const isLoading = status === 'parsing' || status === 'diagnosing';
 
   return (
-    <main>
-      {analysis ? (
-        <div className="topbar">
-          <span className="pill pill--done">분석 완료</span>
-          <button className="linkbtn" type="button" onClick={handleReset}>
-            ↺ 새 이력서로 다시 분석
-          </button>
+    <div className="shell">
+      <Sidebar
+        activePage={activePage}
+        onNavigate={goToPage}
+        unlocked={{ resume: true, posting: !!analysis, roadmap: !!report }}
+        done={{ resume: !!analysis, posting: !!report }}
+        showRoadmapBadge={!!report && !visitedRoadmap}
+        showReset={!!analysis}
+        onReset={handleReset}
+      />
+
+      <div className="content">
+        <div className="content__inner">
+          <ErrorBanner message={errorMessage} onClose={() => setErrorMessage(null)} />
+
+          {activePage === 'resume' && (
+            <>
+              <section className="pagehead">
+                <span className="pagehead__eyebrow">STEP 1</span>
+                <h1 className="pagehead__title">이력서 분석</h1>
+                <p className="pagehead__desc">
+                  {analysis
+                    ? 'AI가 이력서를 이렇게 읽었어요. 아래 진단서의 근거는 이 항목들을 짚어요.'
+                    : '이력서와 지원하려는 채용공고를 넣으면, 무엇이 충족되고 무엇이 필요한지 공고의 문장을 짚어 알려드려요. 회원가입 없이 바로 시작할 수 있어요.'}
+                </p>
+                {!analysis && (
+                  <p className="pagehead__note">
+                    취업을 대신 책임지는 무제한 컨설팅이 아니에요. 지원 직전, 근거 있는 판단
+                    하나를 빠르게 더해드릴 뿐이에요.
+                  </p>
+                )}
+              </section>
+
+              <div className="stack">
+                {!analysis && !entryMode && <EntryChoice onChoose={setEntryMode} />}
+
+                {!analysis && entryMode === 'upload' && (
+                  <UploadSection
+                    status={status}
+                    onAnalyze={handleAnalyze}
+                    onError={setErrorMessage}
+                    onClearError={() => setErrorMessage(null)}
+                    initialFile={sampleFile}
+                    onBack={() => setEntryMode(null)}
+                  />
+                )}
+
+                {!analysis && entryMode === 'manual' && (
+                  <ManualEntrySection onComplete={handleManualComplete} onBack={() => setEntryMode(null)} />
+                )}
+
+                {analysis && (
+                  <>
+                    <AnalysisSummary analysis={analysis} />
+                    <button type="button" className="submit" onClick={() => goToPage('posting')}>
+                      다음: 채용공고 진단하기 →
+                    </button>
+                  </>
+                )}
+              </div>
+            </>
+          )}
+
+          {activePage === 'posting' && analysis && (
+            <>
+              <section className="pagehead">
+                <span className="pagehead__eyebrow">STEP 2</span>
+                <h1 className="pagehead__title">채용공고 진단</h1>
+                <p className="pagehead__desc">
+                  본문을 붙여넣거나 URL을 입력하면, 공고 문장을 짚어 적합도 진단서를 만들어드려요.
+                </p>
+              </section>
+
+              <div className="stack">
+                <PostingInput
+                  status={status}
+                  onDiagnose={handleDiagnose}
+                  hasReport={report !== null}
+                  initialText={samplePosting}
+                />
+
+                {isLoading && <LoadingIndicator status={status} />}
+
+                {posting && <PostingSummary posting={posting} />}
+
+                {report && <FitReport report={report} />}
+
+                {report && (
+                  <button type="button" className="submit" onClick={() => goToPage('roadmap')}>
+                    다음: 성장 로드맵 보기 →
+                  </button>
+                )}
+              </div>
+            </>
+          )}
+
+          {activePage === 'roadmap' && report && (
+            <>
+              <section className="pagehead">
+                <span className="pagehead__eyebrow">STEP 3</span>
+                <h1 className="pagehead__title">성장 로드맵</h1>
+                <p className="pagehead__desc">
+                  입사 후 이 팀에 자연스럽게 적응하려면 다음에 뭐가 필요할지, 경력직 공고를
+                  기준으로 보여드려요.
+                </p>
+              </section>
+
+              <div className="stack">
+                <CareerOutlook analysis={analysis} posting={posting} />
+              </div>
+            </>
+          )}
         </div>
-      ) : (
-        <>
-          <section className="hero">
-            <span className="hero__badge">이력서 기반 기업별 직무 적합도 진단</span>
-            <h1 className="hero__title">
-              이 공고, 내 경험으로 지원해도 될까?<br />
-              <em>근거와 함께</em> 답해드려요
-            </h1>
-            <p className="hero__desc">
-              이력서와 지원하려는 채용공고를 넣으면, 무엇이 충족되고 무엇이 필요한지
-              공고의 문장을 짚어 알려드려요. 회원가입 없이 바로 시작할 수 있어요.
-            </p>
-          </section>
-
-          <ol className="steps">
-            <li className="step">
-              <span className="step__no">1</span>
-              <div className="step__title">이력서 업로드 또는 직접 입력</div>
-              <p className="step__desc">이력서가 없어도 경력·활동을 입력해 시작할 수 있어요</p>
-            </li>
-            <li className="step">
-              <span className="step__no">2</span>
-              <div className="step__title">채용공고 입력</div>
-              <p className="step__desc">본문 붙여넣기 또는 URL</p>
-            </li>
-            <li className="step">
-              <span className="step__no">3</span>
-              <div className="step__title">적합도 진단서</div>
-              <p className="step__desc">점수 · 필요 역량 · 판단 근거</p>
-            </li>
-          </ol>
-        </>
-      )}
-
-      <ErrorBanner message={errorMessage} onClose={() => setErrorMessage(null)} />
-
-      <div className="stack">
-        {/* ① — analysis가 생기면 자리를 비운다 (§9.3). 그 전에는 이력서 유무로 먼저 분기한다. */}
-        {!analysis && !entryMode && <EntryChoice onChoose={setEntryMode} />}
-
-        {!analysis && entryMode === 'upload' && (
-          <UploadSection
-            status={status}
-            onAnalyze={handleAnalyze}
-            onError={setErrorMessage}
-            onClearError={() => setErrorMessage(null)}
-            initialFile={sampleFile}
-            onBack={() => setEntryMode(null)}
-          />
-        )}
-
-        {!analysis && entryMode === 'manual' && (
-          <ManualEntrySection onComplete={handleManualComplete} onBack={() => setEntryMode(null)} />
-        )}
-
-        {/* ② */}
-        {analysis && <AnalysisSummary analysis={analysis} />}
-
-        {/* ③ — 진단 후에도 닫지 않는다. 여러 공고 비교가 페르소나 B의 동선이다(§4.2) */}
-        {analysis && (
-          <PostingInput
-            status={status}
-            onDiagnose={handleDiagnose}
-            hasReport={report !== null}
-            initialText={samplePosting}
-          />
-        )}
-
-        {isLoading && <LoadingIndicator status={status} />}
-
-        {/* ④ */}
-        {posting && <PostingSummary posting={posting} />}
-
-        {/* ⑤ */}
-        {report && <FitReport report={report} />}
       </div>
-    </main>
+    </div>
   );
 }

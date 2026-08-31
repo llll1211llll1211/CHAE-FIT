@@ -120,6 +120,33 @@ export const REASONS_SCHEMA = {
   additionalProperties: false,
 };
 
+/**
+ * 향후 필요 역량 설명 (경력공고 비교 기능).
+ *
+ * REASONS_SCHEMA와 같은 원칙 — 어떤 태그가 "향후 필요"인지는 집합 연산(코퍼스 경력
+ * 태그 − 신입 태그 − 사용자 보유 태그)으로 이미 확정된 뒤, LLM은 각 항목이 왜
+ * 필요해지는지 1줄 설명만 쓴다. 점수·목록은 절대 LLM이 만들지 않는다.
+ */
+export const FUTURE_SKILL_REASONS_SCHEMA = {
+  type: 'object',
+  properties: {
+    reasons: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          label: { type: 'string', description: '주어진 역량 라벨을 그대로 인용' },
+          text: { type: 'string', description: '경력 공고 맥락에서 왜 필요해지는지 1문장' },
+        },
+        required: ['label', 'text'],
+        additionalProperties: false,
+      },
+    },
+  },
+  required: ['reasons'],
+  additionalProperties: false,
+};
+
 // ── 적합도 산출 (PRD §8.4) — 전부 결정적 ────────────────
 
 /**

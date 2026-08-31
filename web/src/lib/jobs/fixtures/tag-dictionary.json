@@ -1,0 +1,1113 @@
+{
+  "SK.SEMI.PHOTO": {
+    "label": "포토리소그래피",
+    "category": "전공지식",
+    "aliases": [
+      "포토",
+      "노광",
+      "리소그래피",
+      "photolithography",
+      "EUV",
+      "ArF",
+      "PR",
+      "포토공정"
+    ]
+  },
+  "SK.SEMI.ETCH": {
+    "label": "식각(Etch)",
+    "category": "전공지식",
+    "aliases": [
+      "식각",
+      "에칭",
+      "etch",
+      "건식식각",
+      "습식식각",
+      "RIE",
+      "ICP"
+    ]
+  },
+  "SK.SEMI.CVD": {
+    "label": "박막증착(CVD/ALD)",
+    "category": "전공지식",
+    "aliases": [
+      "CVD",
+      "PECVD",
+      "LPCVD",
+      "ALD",
+      "증착",
+      "박막",
+      "deposition"
+    ]
+  },
+  "SK.SEMI.PVD": {
+    "label": "PVD·스퍼터링",
+    "category": "전공지식",
+    "aliases": [
+      "스퍼터",
+      "sputter",
+      "PVD",
+      "e-beam",
+      "열증착",
+      "thermal evaporation"
+    ]
+  },
+  "SK.SEMI.CMP": {
+    "label": "CMP",
+    "category": "전공지식",
+    "aliases": [
+      "CMP",
+      "화학적기계연마",
+      "평탄화",
+      "슬러리"
+    ]
+  },
+  "SK.SEMI.DIFF": {
+    "label": "확산·열처리",
+    "category": "전공지식",
+    "aliases": [
+      "확산",
+      "diffusion",
+      "이온주입",
+      "implantation",
+      "RTA",
+      "어닐링",
+      "산화"
+    ]
+  },
+  "SK.SEMI.METAL": {
+    "label": "금속배선·Metallization",
+    "category": "전공지식",
+    "aliases": [
+      "메탈",
+      "배선",
+      "다마신",
+      "damascene",
+      "barrier",
+      "seed layer"
+    ]
+  },
+  "SK.SEMI.DEVICE": {
+    "label": "반도체 소자물리",
+    "category": "전공지식",
+    "aliases": [
+      "소자",
+      "MOSFET",
+      "FinFET",
+      "GAA",
+      "밴드갭",
+      "캐리어",
+      "문턱전압"
+    ]
+  },
+  "SK.SEMI.PKG": {
+    "label": "패키징·후공정",
+    "category": "전공지식",
+    "aliases": [
+      "패키징",
+      "package",
+      "wire bond",
+      "flip chip",
+      "TSV",
+      "bump",
+      "몰딩",
+      "FCBGA",
+      "SiP"
+    ]
+  },
+  "SK.SEMI.PLATING": {
+    "label": "전해도금·Cu Plating",
+    "category": "실험·장비",
+    "aliases": [
+      "도금",
+      "plating",
+      "전해도금",
+      "electroplating",
+      "구리도금",
+      "Cu fill",
+      "bottom-up fill",
+      "TGV"
+    ]
+  },
+  "SK.SEMI.MEMORY": {
+    "label": "메모리 디바이스(DRAM/NAND/HBM)",
+    "category": "전공지식",
+    "aliases": [
+      "DRAM",
+      "NAND",
+      "HBM",
+      "3D NAND",
+      "낸드",
+      "메모리"
+    ]
+  },
+  "SK.SEMI.VACPLASMA": {
+    "label": "진공·플라즈마 공학",
+    "category": "전공지식",
+    "aliases": [
+      "진공",
+      "플라즈마",
+      "plasma",
+      "RF",
+      "매칭박스",
+      "Paschen"
+    ]
+  },
+  "SK.BAT.ELECTRODE": {
+    "label": "전극공정(믹싱·코팅·압연)",
+    "category": "전공지식",
+    "aliases": [
+      "전극",
+      "슬러리",
+      "코팅",
+      "압연",
+      "calendering",
+      "믹싱"
+    ]
+  },
+  "SK.BAT.ASSEMBLY": {
+    "label": "조립공정(와인딩·스태킹)",
+    "category": "전공지식",
+    "aliases": [
+      "와인딩",
+      "스태킹",
+      "노칭",
+      "조립공정",
+      "탭웰딩"
+    ]
+  },
+  "SK.BAT.ECHEM": {
+    "label": "전기화학",
+    "category": "전공지식",
+    "aliases": [
+      "전기화학",
+      "electrochemistry",
+      "CV",
+      "EIS",
+      "임피던스",
+      "충방전"
+    ]
+  },
+  "SK.BAT.MATERIAL": {
+    "label": "전지소재(양극·음극·전해질)",
+    "category": "전공지식",
+    "aliases": [
+      "양극재",
+      "음극재",
+      "전해질",
+      "분리막",
+      "NCM",
+      "LFP"
+    ]
+  },
+  "SK.DISP.OLED": {
+    "label": "OLED 소자·공정",
+    "category": "전공지식",
+    "aliases": [
+      "OLED",
+      "유기발광",
+      "발광층",
+      "IVL",
+      "수명평가",
+      "증착 마스크"
+    ]
+  },
+  "SK.DISP.TFT": {
+    "label": "TFT·백플레인",
+    "category": "전공지식",
+    "aliases": [
+      "TFT",
+      "LTPS",
+      "IGZO",
+      "백플레인"
+    ]
+  },
+  "SK.ELEC.PCB": {
+    "label": "PCB·패키지기판",
+    "category": "전공지식",
+    "aliases": [
+      "PCB",
+      "기판",
+      "빌드업",
+      "FCBGA",
+      "레이업",
+      "유리기판"
+    ]
+  },
+  "SK.ANAL.SEM": {
+    "label": "SEM·TEM 분석",
+    "category": "실험·장비",
+    "aliases": [
+      "SEM",
+      "TEM",
+      "FIB",
+      "EDS",
+      "전자현미경"
+    ]
+  },
+  "SK.ANAL.XRD": {
+    "label": "XRD·XRF 분석",
+    "category": "실험·장비",
+    "aliases": [
+      "XRD",
+      "XRF",
+      "회절",
+      "Bragg"
+    ]
+  },
+  "SK.ANAL.CHEM": {
+    "label": "습식·전기화학 분석",
+    "category": "실험·장비",
+    "aliases": [
+      "CVS",
+      "적정",
+      "titration",
+      "ICP",
+      "HPLC",
+      "CMI"
+    ]
+  },
+  "SK.ANAL.RELI": {
+    "label": "신뢰성 평가",
+    "category": "실험·장비",
+    "aliases": [
+      "신뢰성",
+      "reliability",
+      "TCT",
+      "HTS",
+      "MSL",
+      "가속수명",
+      "HAST"
+    ]
+  },
+  "SK.ANAL.FA": {
+    "label": "불량분석(FA)",
+    "category": "실험·장비",
+    "aliases": [
+      "불량분석",
+      "FA",
+      "failure analysis",
+      "원인분석",
+      "8D"
+    ]
+  },
+  "SK.DATA.PY": {
+    "label": "Python",
+    "category": "데이터·SW",
+    "aliases": [
+      "Python",
+      "파이썬",
+      "pandas",
+      "numpy"
+    ]
+  },
+  "SK.DATA.ML": {
+    "label": "머신러닝 모델링",
+    "category": "데이터·SW",
+    "aliases": [
+      "머신러닝",
+      "machine learning",
+      "XGBoost",
+      "RandomForest",
+      "CNN",
+      "ViT",
+      "딥러닝"
+    ]
+  },
+  "SK.DATA.STAT": {
+    "label": "통계분석·회귀",
+    "category": "데이터·SW",
+    "aliases": [
+      "회귀",
+      "regression",
+      "통계",
+      "가설검정",
+      "ANOVA",
+      "상관분석"
+    ]
+  },
+  "SK.DATA.DOE": {
+    "label": "실험계획법(DOE)",
+    "category": "품질·방법론",
+    "aliases": [
+      "DOE",
+      "실험계획",
+      "직교배열",
+      "반응표면",
+      "Minitab",
+      "JMP"
+    ]
+  },
+  "SK.DATA.SPC": {
+    "label": "SPC·공정관리",
+    "category": "품질·방법론",
+    "aliases": [
+      "SPC",
+      "관리도",
+      "Cpk",
+      "공정능력",
+      "FDC"
+    ]
+  },
+  "SK.DATA.SQL": {
+    "label": "SQL·DB",
+    "category": "데이터·SW",
+    "aliases": [
+      "SQL",
+      "MySQL",
+      "PostgreSQL",
+      "쿼리",
+      "데이터베이스"
+    ]
+  },
+  "SK.DATA.VIZ": {
+    "label": "데이터 시각화",
+    "category": "데이터·SW",
+    "aliases": [
+      "시각화",
+      "Tableau",
+      "matplotlib",
+      "대시보드",
+      "PowerBI"
+    ]
+  },
+  "SK.DEV.BE": {
+    "label": "백엔드 개발",
+    "category": "데이터·SW",
+    "aliases": [
+      "Java",
+      "Spring",
+      "Node.js",
+      "백엔드",
+      "API 서버",
+      "Django"
+    ]
+  },
+  "SK.DEV.FE": {
+    "label": "프론트엔드 개발",
+    "category": "데이터·SW",
+    "aliases": [
+      "React",
+      "Vue",
+      "프론트엔드",
+      "JavaScript",
+      "TypeScript"
+    ]
+  },
+  "SK.DEV.CLOUD": {
+    "label": "클라우드·인프라",
+    "category": "데이터·SW",
+    "aliases": [
+      "AWS",
+      "Azure",
+      "GCP",
+      "Docker",
+      "Kubernetes",
+      "쿠버네티스"
+    ]
+  },
+  "SK.QM.SIXSIGMA": {
+    "label": "6시그마·DMAIC",
+    "category": "품질·방법론",
+    "aliases": [
+      "6시그마",
+      "식스시그마",
+      "DMAIC",
+      "GB",
+      "BB"
+    ]
+  },
+  "SK.QM.ISO": {
+    "label": "품질시스템(ISO/IATF)",
+    "category": "품질·방법론",
+    "aliases": [
+      "ISO 9001",
+      "IATF 16949",
+      "ISO 14001",
+      "품질경영시스템"
+    ]
+  },
+  "SK.QM.APQP": {
+    "label": "APQP·PPAP·FMEA",
+    "category": "품질·방법론",
+    "aliases": [
+      "APQP",
+      "PPAP",
+      "FMEA",
+      "관리계획서",
+      "control plan"
+    ]
+  },
+  "SK.QM.YIELD": {
+    "label": "수율관리",
+    "category": "품질·방법론",
+    "aliases": [
+      "수율",
+      "yield",
+      "yield 개선",
+      "불량률"
+    ]
+  },
+  "SK.EQ.MAINT": {
+    "label": "설비 유지보수·PM",
+    "category": "실험·장비",
+    "aliases": [
+      "설비",
+      "PM",
+      "예방보전",
+      "정비",
+      "trouble shooting",
+      "예지보전"
+    ]
+  },
+  "SK.EQ.AUTO": {
+    "label": "자동화·제어(PLC)",
+    "category": "실험·장비",
+    "aliases": [
+      "PLC",
+      "자동화",
+      "제어",
+      "SCADA",
+      "HMI",
+      "로봇"
+    ]
+  },
+  "SK.EQ.CAD": {
+    "label": "기구설계·CAD",
+    "category": "실험·장비",
+    "aliases": [
+      "CATIA",
+      "SolidWorks",
+      "AutoCAD",
+      "3D 모델링",
+      "기구설계"
+    ]
+  },
+  "SK.EQ.CFD": {
+    "label": "해석·시뮬레이션",
+    "category": "실험·장비",
+    "aliases": [
+      "ANSYS",
+      "CFD",
+      "구조해석",
+      "열해석",
+      "COMSOL",
+      "TCAD"
+    ]
+  },
+  "SK.SOFT.TEAM": {
+    "label": "협업·팀 프로젝트 리딩",
+    "category": "소프트스킬",
+    "aliases": [
+      "조장",
+      "팀장",
+      "리더",
+      "협업",
+      "팀 프로젝트",
+      "PM"
+    ]
+  },
+  "SK.SOFT.DOC": {
+    "label": "기술문서 작성·보고",
+    "category": "소프트스킬",
+    "aliases": [
+      "보고서",
+      "기술문서",
+      "논문",
+      "발표",
+      "PT"
+    ]
+  },
+  "SK.SOFT.CS": {
+    "label": "고객 대응",
+    "category": "소프트스킬",
+    "aliases": [
+      "고객사",
+      "CS",
+      "대외 협의",
+      "커뮤니케이션"
+    ]
+  },
+  "SK.LANG.EN": {
+    "label": "영어(비즈니스)",
+    "category": "언어·자격",
+    "aliases": [
+      "TOEIC",
+      "토익",
+      "OPIc",
+      "TOEIC Speaking",
+      "영어회화",
+      "IELTS"
+    ]
+  },
+  "SK.LANG.CN": {
+    "label": "중국어",
+    "category": "언어·자격",
+    "aliases": [
+      "HSK",
+      "중국어"
+    ]
+  },
+  "SK.CERT.SEMI": {
+    "label": "반도체 관련 자격",
+    "category": "언어·자격",
+    "aliases": [
+      "반도체장비기사",
+      "산업기사",
+      "품질경영기사",
+      "화공기사",
+      "위험물"
+    ]
+  },
+  "SK.CERT.DATA": {
+    "label": "데이터 분석 자격",
+    "category": "언어·자격",
+    "aliases": [
+      "ADsP",
+      "ADP",
+      "빅데이터분석기사",
+      "SQLD"
+    ]
+  },
+  "SK.EXP.INTERN": {
+    "label": "관련 산업 인턴 경험",
+    "category": "경험",
+    "aliases": [
+      "인턴",
+      "인턴십",
+      "현장실습",
+      "internship"
+    ]
+  },
+  "SK.EXP.LAB": {
+    "label": "연구실 경험",
+    "category": "경험",
+    "aliases": [
+      "학부연구생",
+      "연구실",
+      "랩",
+      "연구원",
+      "학연"
+    ]
+  },
+  "SK.EXP.CAPSTONE": {
+    "label": "캡스톤·산학 프로젝트",
+    "category": "경험",
+    "aliases": [
+      "캡스톤",
+      "산학",
+      "졸업작품",
+      "졸업연구"
+    ]
+  },
+  "SK.EXP.PATENT": {
+    "label": "특허·논문 실적",
+    "category": "경험",
+    "aliases": [
+      "특허",
+      "출원",
+      "등록",
+      "논문",
+      "SCI",
+      "학회 발표"
+    ]
+  },
+  "SK.EXP.CONTEST": {
+    "label": "공모전 수상",
+    "category": "경험",
+    "aliases": [
+      "공모전",
+      "경진대회",
+      "수상",
+      "입상"
+    ]
+  },
+  "SK.ELEC.OPTIC": {
+    "label": "광학 설계·카메라모듈",
+    "category": "전공지식",
+    "aliases": [
+      "광학",
+      "렌즈",
+      "카메라모듈",
+      "Zemax",
+      "이미지센서",
+      "액추에이터"
+    ]
+  },
+  "SK.CHEM.UNIT": {
+    "label": "화공 단위조작·반응공학",
+    "category": "전공지식",
+    "aliases": [
+      "단위조작",
+      "반응공학",
+      "열전달",
+      "물질전달",
+      "증류",
+      "유체역학"
+    ]
+  },
+  "SK.CHEM.SIM": {
+    "label": "공정 시뮬레이션",
+    "category": "데이터·SW",
+    "aliases": [
+      "Aspen",
+      "HYSYS",
+      "PRO/II",
+      "공정모사",
+      "flowsheet"
+    ]
+  },
+  "SK.BIO.GMP": {
+    "label": "GMP·밸리데이션",
+    "category": "품질·방법론",
+    "aliases": [
+      "GMP",
+      "cGMP",
+      "밸리데이션",
+      "validation",
+      "일탈",
+      "CAPA",
+      "SOP"
+    ]
+  },
+  "SK.BIO.CLINIC": {
+    "label": "임상개발·인허가(RA)",
+    "category": "전공지식",
+    "aliases": [
+      "임상시험",
+      "IND",
+      "NDA",
+      "인허가",
+      "RA",
+      "식약처",
+      "GCP"
+    ]
+  },
+  "SK.CON.STRUCT": {
+    "label": "구조·토목 설계",
+    "category": "전공지식",
+    "aliases": [
+      "구조설계",
+      "토목",
+      "철근콘크리트",
+      "지반",
+      "내진",
+      "MIDAS"
+    ]
+  },
+  "SK.CON.PLANT": {
+    "label": "플랜트 공정설계",
+    "category": "전공지식",
+    "aliases": [
+      "플랜트",
+      "P&ID",
+      "PFD",
+      "배관",
+      "EPC",
+      "기본설계",
+      "상세설계"
+    ]
+  },
+  "SK.CON.BIM": {
+    "label": "BIM·설계 협업",
+    "category": "데이터·SW",
+    "aliases": [
+      "BIM",
+      "Revit",
+      "Navisworks",
+      "3D 설계"
+    ]
+  },
+  "SK.SHIP.DESIGN": {
+    "label": "선박·해양 설계",
+    "category": "전공지식",
+    "aliases": [
+      "선박설계",
+      "선체",
+      "의장",
+      "조선",
+      "해양플랜트",
+      "선급"
+    ]
+  },
+  "SK.DEV.GAME": {
+    "label": "게임 클라이언트·엔진",
+    "category": "데이터·SW",
+    "aliases": [
+      "Unity",
+      "Unreal",
+      "C++",
+      "게임 개발",
+      "그래픽스",
+      "쉐이더"
+    ]
+  },
+  "SK.DEV.MOBILE": {
+    "label": "모바일 앱 개발",
+    "category": "데이터·SW",
+    "aliases": [
+      "Android",
+      "iOS",
+      "Kotlin",
+      "Swift",
+      "React Native",
+      "Flutter"
+    ]
+  },
+  "SK.DEV.SEC": {
+    "label": "정보보안",
+    "category": "데이터·SW",
+    "aliases": [
+      "보안",
+      "모의해킹",
+      "침해대응",
+      "관제",
+      "취약점",
+      "포렌식",
+      "정보보안기사"
+    ]
+  },
+  "SK.BIZ.SCM": {
+    "label": "구매·SCM",
+    "category": "전공지식",
+    "aliases": [
+      "구매",
+      "SCM",
+      "소싱",
+      "협력사",
+      "원가절감",
+      "수급 계획",
+      "물류"
+    ]
+  },
+  "SK.BIZ.SALES": {
+    "label": "B2B 기술영업",
+    "category": "소프트스킬",
+    "aliases": [
+      "기술영업",
+      "B2B",
+      "고객사 대응",
+      "수주",
+      "영업",
+      "제안"
+    ]
+  },
+  "SK.BIZ.MKT": {
+    "label": "마케팅·상품기획",
+    "category": "소프트스킬",
+    "aliases": [
+      "마케팅",
+      "상품기획",
+      "시장조사",
+      "브랜드",
+      "프로모션"
+    ]
+  },
+  "SK.BIZ.FIN": {
+    "label": "재무·회계",
+    "category": "전공지식",
+    "aliases": [
+      "재무",
+      "회계",
+      "원가",
+      "결산",
+      "IFRS",
+      "세무",
+      "관리회계"
+    ]
+  },
+  "SK.BIZ.HR": {
+    "label": "인사·조직",
+    "category": "전공지식",
+    "aliases": [
+      "인사",
+      "채용",
+      "HRD",
+      "노무",
+      "평가보상",
+      "조직문화"
+    ]
+  },
+  "SK.BIZ.STRAT": {
+    "label": "전략기획·사업분석",
+    "category": "소프트스킬",
+    "aliases": [
+      "전략기획",
+      "사업분석",
+      "시장 분석",
+      "타당성 검토",
+      "KPI"
+    ]
+  },
+  "SK.MECH.DYN": {
+    "label": "기계 4대 역학",
+    "category": "전공지식",
+    "aliases": [
+      "정역학",
+      "동역학",
+      "열역학",
+      "유체역학",
+      "재료역학",
+      "4대역학"
+    ]
+  },
+  "SK.ELEC.CIRCUIT": {
+    "label": "회로설계",
+    "category": "전공지식",
+    "aliases": [
+      "회로설계",
+      "아날로그 회로",
+      "디지털 회로",
+      "PCB 설계",
+      "OrCAD",
+      "Altium"
+    ]
+  },
+  "SK.ELEC.PWR": {
+    "label": "전력전자·파워",
+    "category": "전공지식",
+    "aliases": [
+      "전력전자",
+      "인버터",
+      "컨버터",
+      "SMPS",
+      "모터제어"
+    ]
+  },
+  "SK.SEMI.EDA": {
+    "label": "회로설계·EDA 툴",
+    "category": "실험·장비",
+    "aliases": [
+      "Verilog",
+      "VHDL",
+      "Cadence",
+      "Synopsys",
+      "RTL",
+      "레이아웃"
+    ]
+  },
+  "SK.DEV.EMBED": {
+    "label": "임베디드·펌웨어",
+    "category": "데이터·SW",
+    "aliases": [
+      "임베디드",
+      "펌웨어",
+      "C언어",
+      "MCU",
+      "RTOS",
+      "베어메탈"
+    ]
+  },
+  "SK.DEV.AUTOSAR": {
+    "label": "차량 SW·AUTOSAR",
+    "category": "데이터·SW",
+    "aliases": [
+      "AUTOSAR",
+      "CAN",
+      "차량제어",
+      "ECU",
+      "ISO 26262"
+    ]
+  },
+  "SK.DEV.DEVOPS": {
+    "label": "DevOps·CI/CD",
+    "category": "데이터·SW",
+    "aliases": [
+      "CI/CD",
+      "Jenkins",
+      "GitHub Actions",
+      "IaC",
+      "Terraform",
+      "모니터링"
+    ]
+  },
+  "SK.DEV.LLM": {
+    "label": "LLM·생성형 AI 활용",
+    "category": "데이터·SW",
+    "aliases": [
+      "LLM",
+      "생성형 AI",
+      "프롬프트",
+      "RAG",
+      "LangChain",
+      "파인튜닝"
+    ]
+  },
+  "SK.MAT.POLY": {
+    "label": "고분자 합성·가공",
+    "category": "전공지식",
+    "aliases": [
+      "고분자",
+      "중합",
+      "컴파운딩",
+      "압출",
+      "레진"
+    ]
+  },
+  "SK.BIO.CULTURE": {
+    "label": "세포배양·업스트림",
+    "category": "실험·장비",
+    "aliases": [
+      "세포배양",
+      "바이오리액터",
+      "업스트림",
+      "배지",
+      "cell culture"
+    ]
+  },
+  "SK.BIO.PURIF": {
+    "label": "정제·다운스트림",
+    "category": "실험·장비",
+    "aliases": [
+      "정제",
+      "크로마토그래피",
+      "다운스트림",
+      "여과",
+      "purification"
+    ]
+  },
+  "SK.BIO.RA": {
+    "label": "인허가(RA)",
+    "category": "품질·방법론",
+    "aliases": [
+      "인허가",
+      "RA",
+      "regulatory",
+      "식약처",
+      "FDA",
+      "허가서류"
+    ]
+  },
+  "SK.BIO.SYNTH": {
+    "label": "유기합성·제제연구",
+    "category": "실험·장비",
+    "aliases": [
+      "유기합성",
+      "제제",
+      "원료의약품",
+      "API",
+      "스케일업"
+    ]
+  },
+  "SK.BIO.MOL": {
+    "label": "분자생물학 실험",
+    "category": "실험·장비",
+    "aliases": [
+      "PCR",
+      "western blot",
+      "ELISA",
+      "클로닝",
+      "유전자"
+    ]
+  },
+  "SK.CON.CIVIL": {
+    "label": "토목·시공관리",
+    "category": "전공지식",
+    "aliases": [
+      "시공관리",
+      "토목",
+      "공정관리",
+      "현장관리",
+      "품질시험"
+    ]
+  },
+  "SK.CON.COST": {
+    "label": "적산·원가관리",
+    "category": "품질·방법론",
+    "aliases": [
+      "적산",
+      "견적",
+      "원가관리",
+      "물량산출",
+      "VE"
+    ]
+  },
+  "SK.SHIP.WELD": {
+    "label": "용접·접합 기술",
+    "category": "실험·장비",
+    "aliases": [
+      "용접",
+      "welding",
+      "접합",
+      "비파괴검사",
+      "NDT"
+    ]
+  },
+  "SK.SHE.ENV": {
+    "label": "환경·안전보건(SHE)",
+    "category": "품질·방법론",
+    "aliases": [
+      "안전보건",
+      "SHE",
+      "ESH",
+      "환경관리",
+      "위험성평가",
+      "중대재해"
+    ]
+  },
+  "SK.PROD.PLAN": {
+    "label": "생산계획·MRP",
+    "category": "품질·방법론",
+    "aliases": [
+      "생산계획",
+      "MRP",
+      "APS",
+      "수요예측",
+      "납기관리"
+    ]
+  },
+  "SK.PROD.IE": {
+    "label": "산업공학(IE)·라인밸런싱",
+    "category": "품질·방법론",
+    "aliases": [
+      "IE",
+      "라인밸런싱",
+      "표준시간",
+      "레이아웃",
+      "TPM",
+      "린"
+    ]
+  },
+  "SK.BIZ.IP": {
+    "label": "특허·지식재산",
+    "category": "품질·방법론",
+    "aliases": [
+      "특허",
+      "지식재산",
+      "IP",
+      "선행기술조사",
+      "명세서"
+    ]
+  },
+  "SK.BIZ.TRADE": {
+    "label": "무역·수출입",
+    "category": "품질·방법론",
+    "aliases": [
+      "무역",
+      "수출입",
+      "통관",
+      "인코텀즈",
+      "L/C"
+    ]
+  },
+  "SK.CERT.CON": {
+    "label": "건설 관련 자격",
+    "category": "언어·자격",
+    "aliases": [
+      "건축기사",
+      "토목기사",
+      "건설안전기사",
+      "산업안전기사",
+      "기계기사"
+    ]
+  },
+  "SK.CERT.BIO": {
+    "label": "바이오·화학 관련 자격",
+    "category": "언어·자격",
+    "aliases": [
+      "생물공학기사",
+      "화학분석기사",
+      "위험물산업기사",
+      "GMP 교육"
+    ]
+  }
+}

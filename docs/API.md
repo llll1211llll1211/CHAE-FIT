@@ -201,6 +201,84 @@ fitScore      = 충족 수 ÷ 요구 수 × 가중치
 
 ---
 
+## 4. `POST /api/career/outlook`
+
+이 회사·직무의 **경력직 공고**를 코퍼스에서 찾아, 신입 입사 후 단계적으로 필요해지는
+역량과 관련 국비지원 강의를 안내한다. (신규 — 경력공고 비교)
+
+**요청** — `application/json`. `/api/fit/diagnose`와 **같은 두 값**을 그대로 재사용한다.
+
+```json
+{
+  "analysis": { "...": "/api/resume/analyze의 analysis" },
+  "posting":  { "...": "/api/posting/parse의 posting" }
+}
+```
+
+**응답 200 — 매칭 실패** (코퍼스에 이 회사·직무 페어가 없음)
+
+```json
+{ "matched": false }
+```
+
+> 매칭 실패는 에러가 아니라 **조용한 침묵**이다. 화면은 이 섹션을 통째로 숨긴다 —
+> 아무 페어나 억지로 보여주지 않는다 (FitReport의 `hasSkillInfo` 원칙과 동일).
+
+**응답 200 — 매칭 성공**
+
+```json
+{
+  "matched": true,
+  "company": "삼성전자 DS부문",
+  "careerTitle": "반도체 공정기술 (메모리사업부) (경력)",
+  "experienceYears": "4~9년",
+  "sourceUrl": "https://www.samsung-dsrecruit.com/...",
+  "collectedAt": "2026-08-26",
+  "verification": "C",
+  "futureSkills": [
+    {
+      "tagId": "SK.QM.SIXSIGMA",
+      "label": "6시그마·DMAIC",
+      "category": "품질·방법론",
+      "reason": "경력직 공고에서는 6시그마·DMAIC 관련 과제를 직접 리딩하는 역할을 맡게 돼요.",
+      "courses": [
+        {
+          "id": "hrd-108",
+          "title": "ERP정보관리(물류,생산,회계,인사)+전산회계1급&전산세무2급_A",
+          "provider": "(주)KD아카데미",
+          "region": "서울 노원구",
+          "fee": 4501600,
+          "selfPay": 300000,
+          "subsidyRate": 0.93,
+          "isNationalFunded": true
+        }
+      ]
+    }
+  ]
+}
+```
+
+| 필드 | 설명 |
+|---|---|
+| `verification` | 코퍼스 항목의 신뢰도 배지(`A`/`B`/`C`). 경력 페어는 전부 `C`(표준 템플릿 추정) — 실제 크롤링이 아니라 직무 관행 지식으로 구성했다는 뜻. 화면에 반드시 노출한다 |
+| `futureSkills` | **점수가 아니다.** "경력 공고가 신입 공고 대비 추가로 요구하는 역량 중 사용자가 아직 갖추지 못한 것"만 집합 연산으로 뽑는다. 화면은 "부족하다"가 아니라 "다음 단계에 필요해진다"로만 표현한다 |
+| `futureSkills[].courses` | 국비지원(내일배움카드) 강의 매칭. **빈 배열일 수 있다** — 이 경우 "강의 준비 중" 안내만 표시하고, 없는 강의를 지어내지 않는다 |
+
+### 이것도 점수는 LLM이 만들지 않는다
+
+```
+future = career.competency_tags − entry.competency_tags − user.tags
+```
+
+회사·직무 매칭(코퍼스 조회)과 위 태그 차집합은 전부 규칙 기반이다(`jobs/corpusMatch.js`,
+`jobs/tags.js`). LLM은 이미 확정된 태그 각각에 1줄 설명(`reason`)만 붙인다 — 생성에
+실패해도 태그 목록·강의 추천은 이미 확정된 값이라 그대로 응답한다.
+
+강의 추천은 HRD-Net(직업훈련포털) 훈련과정목록을 태그 사전으로 자동 스캔해 만든
+`web/src/lib/courses/fixtures/courses.json`을 그대로 조회한다(`courses/match.js`).
+
+---
+
 ## 화면 상태와의 대응
 
 | 화면 상태 | 호출 |
@@ -208,6 +286,7 @@ fitScore      = 충족 수 ÷ 요구 수 × 가중치
 | `analyzing` | `POST /api/resume/analyze` |
 | `parsing` | `POST /api/posting/parse` |
 | `diagnosing` | `POST /api/fit/diagnose` |
+| ⑤ 진단서 확정 후 (성장 로드맵 섹션, 비동기·낙관적) | `POST /api/career/outlook` |
 
 `parse`와 `diagnose`를 분리한 이유: 공고 요약(④)은 진단 없이도 유용하고, 진단이 실패해도 요약만이라도 보여줄 수 있다.
 
@@ -241,6 +320,7 @@ curl -X POST -H 'Content-Type: application/json' -d @diagnose.json \
 | `/api/resume/analyze` | ✅ | ✅ PDF·txt 텍스트 추출(`unpdf`) + Claude 호출 |
 | `/api/posting/parse` | ✅ | ✅ URL 본문 추출 + Claude 호출 |
 | `/api/fit/diagnose` | ✅ | ✅ 근거 문장 Claude 호출 (점수는 처음부터 실제 구현) |
+| `/api/career/outlook` | ✅ | ✅ 코퍼스 조회 + 태그 차집합은 처음부터 실제 구현, 근거 문장만 Claude 호출 |
 
 **적합도 계산은 목업이 아니라 실제 구현**이므로, 키가 없어도 점수·충족/필요 역량은 진짜 값이 나온다.
 
